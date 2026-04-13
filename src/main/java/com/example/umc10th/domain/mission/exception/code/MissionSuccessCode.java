@@ -15,7 +15,11 @@ public enum MissionSuccessCode implements BaseSuccessCode {
 
     MISSION_OK(HttpStatus.OK,
             "MISSION200_1",
-            "사용자별 진행중/진행 완료 미션을 성공적으로 조회했습니다.")
+            "사용자별 진행중/진행 완료 미션을 성공적으로 조회했습니다."),
+
+    COMPLETED_OK(HttpStatus.OK,
+                 "COMPLETED200_1",
+            "미션 수행 완료! 수고하셨습니다.")
     ;
 
 
