@@ -20,4 +20,8 @@ public class MissionService {
     public MissionResDTO.GetMission getMission(status status,Long cursor, Integer size) {
         throw new UnsupportedOperationException("아직 구현되지 않은 기능입니다.");
     }
+
+    public MissionResDTO.CompletedMissionStatus patchCompleted(MissionReqDTO.CompletedMissionStatus dto) {
+        throw new UnsupportedOperationException("아직 구현되지 않은 기능입니다.");
+    }
 }

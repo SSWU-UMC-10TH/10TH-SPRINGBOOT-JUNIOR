@@ -2,11 +2,14 @@ package com.example.umc10th.domain.mission.dto;
 
 import com.example.umc10th.domain.mission.enums.status;
 import lombok.Builder;
+
+import java.rmi.registry.LocateRegistry;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class MissionResDTO {
 
-    // 홈 화면의 지역별 미션 조회
+    // 홈 화면의 지역별 미션 보상 조건 조회
     @Builder
     public record GetHomeMission (
             Long missionId,
@@ -17,7 +20,7 @@ public class MissionResDTO {
             Integer dday
     ) {}
 
-    // 사용자별 진행중/진행 완료 미션 조회
+    // 미션 정보 조회
     @Builder
     public record GetMissionItem(
             Long user_mission_id,
@@ -46,11 +49,22 @@ public class MissionResDTO {
     ) {}
 
     // 사용자별 진행중/진행 완료 미션 조회
+    @Builder
     public record GetMission(
             List<GetMissionItem> missions,
             Integer cursor,
 
             // 다음 데이터가 있는지 나타냄
             Boolean hasNext
+    ) {}
+
+    // 미션 성공 completed 처리 (patch)
+    @Builder
+    public record CompletedMissionStatus(
+            Long mission_id,
+            Long mission_completed_id,
+            status status,
+            LocalDateTime completed_at, // COMPLETED로 변경된 시간
+            LocalDateTime requested_at // 사장님 인증 번호 요청 시간
     ) {}
 }

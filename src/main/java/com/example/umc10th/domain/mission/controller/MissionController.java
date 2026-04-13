@@ -36,4 +36,13 @@ public class MissionController {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(code, missionService.getMission(status, cursor, size));
     }
+
+    // 미션 성공 COMPLETED 처리
+    @PostMapping("v1/completed")
+    public ApiResponse<MissionResDTO.CompletedMissionStatus> patchCompleted(
+            @RequestBody MissionReqDTO.CompletedMissionStatus dto
+    ) {
+        BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
+        return ApiResponse.onSuccess(code, missionService.patchCompleted(dto));
+    }
 }
