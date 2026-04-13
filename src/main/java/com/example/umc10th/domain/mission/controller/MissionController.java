@@ -21,7 +21,7 @@ public class MissionController {
 
     // 홈 화면 조회
     @PostMapping("/v1/home")
-    public ApiResponse<MissionResDTO.GetHomeMission> getHome(
+    public ApiResponse<MissionResDTO.GetHome> getHome(
             @RequestBody MissionReqDTO.GetHome dto
     ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
