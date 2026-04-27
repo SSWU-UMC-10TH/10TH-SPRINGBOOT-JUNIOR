@@ -1,4 +1,9 @@
 package com.example.umc10th.domain.store.dto;
 
 public class StoreReqDTO {
+
+    public record GetStoreInfo(
+            Long storeId
+    ) {
+    }
 }

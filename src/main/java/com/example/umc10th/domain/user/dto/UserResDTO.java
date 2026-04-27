@@ -8,21 +8,12 @@ import java.util.Date;
 public class UserResDTO {
 
     @Builder
-    public record GetInfo(
-            String name,
-            Gender gender,
-            Date birth_date,
+    public record GetMyPage(
             String nickname,
+            String profileUrl,
             String email,
             String phoneNumber,
-            String profileUrl,
-            LocalDateTime created_at,
-            LocalDateTime updated_at,
-            LocalDateTime deleted_at,
-            Integer point
-    ){}
-
-    public enum Gender {
-        MALE, FEMALE, NONE
+            Long point
+    ) {
     }
 }

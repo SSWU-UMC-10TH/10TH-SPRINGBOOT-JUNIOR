@@ -14,17 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private final UserService userService;
 
     // 마이페이지
-    @PostMapping("/v1/users/me")
-    public ApiResponse<UserResDTO.GetInfo> getInfo(
-            @RequestBody UserReqDTO.GetInfo dto
+    @PostMapping("/me")
+    public ApiResponse<UserResDTO.GetMyPage> getMyPage(
+            @RequestBody UserReqDTO.GetMyPage dto
             ){
         BaseSuccessCode code = UserSuccessCode.OK;
-        return ApiResponse.onSuccess(code, userService.getInfo(dto));
+        return ApiResponse.onSuccess(code, userService.getMyPage(dto));
     }
 }
