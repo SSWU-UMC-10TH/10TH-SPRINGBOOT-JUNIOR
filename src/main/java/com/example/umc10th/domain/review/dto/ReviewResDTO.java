@@ -20,6 +20,10 @@ public class ReviewResDTO {
             String content,
 
             // 리뷰 이미지들을 s3에 등록 후 얻은 url
-            List<String> imageUrls
+            List<String> imageUrls,
+
+            // 작성자 닉네임
+            String nickname,
+            String createdAt
     ) {}
 }
