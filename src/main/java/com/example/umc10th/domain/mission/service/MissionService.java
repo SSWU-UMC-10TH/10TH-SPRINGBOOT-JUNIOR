@@ -2,7 +2,7 @@ package com.example.umc10th.domain.mission.service;
 
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
-import com.example.umc10th.domain.mission.enums.status;
+import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class MissionService {
         throw new UnsupportedOperationException("아직 구현되지 않은 기능입니다.");
     }
 
-    public MissionResDTO.GetMission getMission(status status,Long cursor, Integer size) {
+    public MissionResDTO.GetMission getMission(Status status, Long cursor, Integer size) {
         throw new UnsupportedOperationException("아직 구현되지 않은 기능입니다.");
     }
 

@@ -1,9 +1,8 @@
 package com.example.umc10th.domain.mission.dto;
 
-import com.example.umc10th.domain.mission.enums.status;
+import com.example.umc10th.domain.mission.enums.Status;
 import lombok.Builder;
 
-import java.rmi.registry.LocateRegistry;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class MissionResDTO {
             String store_name,
             Integer condition_amount,
             Integer reward_point,
-            status status,
+            Status status,
             Integer dday
     ) {}
 
@@ -63,7 +62,7 @@ public class MissionResDTO {
     public record CompletedMissionStatus(
             Long mission_id,
             Long mission_completed_id,
-            status status,
+            Status status,
             LocalDateTime completed_at, // COMPLETED로 변경된 시간
             LocalDateTime requested_at // 사장님 인증 번호 요청 시간
     ) {}
