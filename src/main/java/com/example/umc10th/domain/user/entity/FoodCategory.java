@@ -26,6 +26,6 @@ public class FoodCategory {
     private String categoryName;
 
     // 연관 관계
-    @OneToMany(mappedBy = "food_category")
+    @OneToMany(mappedBy = "foodCategory")
     private List<UserFoodPreference> foodPreferenceList = new ArrayList<>();
 }
