@@ -44,14 +44,17 @@ public class MissionResDTO {
             Integer totalMissionCount,
 
             // "안암동"에서 사용자가 아직 수행하지 않은 미션 목록들
-            List<GetHomeMission> missions
+            List<GetHomeMission> missions,
+
+            Long cursor,
+            Boolean hasNext
     ) {}
 
     // 사용자별 진행중/진행 완료 미션 조회
     @Builder
     public record GetMission(
             List<GetMissionItem> missions,
-            Integer cursor,
+            Long cursor,
 
             // 다음 데이터가 있는지 나타냄
             Boolean hasNext
