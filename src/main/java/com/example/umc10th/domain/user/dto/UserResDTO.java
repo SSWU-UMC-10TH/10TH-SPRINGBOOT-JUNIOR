@@ -11,4 +11,14 @@ public class UserResDTO {
             String nickname,
             String email
     ) {}
+
+    // 마이페이지 조회
+    @Builder
+    public record MyPage(
+            String nickname,
+            String email,
+            String phoneNumber,
+            Boolean isPhoneVerified,
+            Long point
+    ) {}
 }
