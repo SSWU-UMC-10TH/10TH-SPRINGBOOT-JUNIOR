@@ -29,6 +29,7 @@ public class Store extends BaseEntity {
     private String name;
 
     @Column(name = "category", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     // 연관 관계
