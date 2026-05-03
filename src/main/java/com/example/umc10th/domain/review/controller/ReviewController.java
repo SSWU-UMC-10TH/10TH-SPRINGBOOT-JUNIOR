@@ -33,4 +33,36 @@ public class ReviewController {
         BaseSuccessCode code = ReviewSuccessCode.CREATED;
         return ApiResponse.onSuccess(code, reviewService.createReview(userMissionId, dto, images));
     }
+
+    // w7 : 내가 작성한 리뷰 조회 - ID 순
+    @GetMapping("/users/reviews")
+    public ApiResponse<ReviewResDTO.MyReviewListResponse> getMyReviewsById(
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long cursor,
+            @RequestParam(defaultValue = "5") Integer size
+    ) {
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.MY_REVIEWS_OK,
+                reviewService.getMyReviewsById(userId, cursor, size)
+        );
+    }
+
+    // w7 : 내가 작성한 리뷰 조회 - 별점 순
+    @GetMapping("/users/reviews/rating")
+    public ApiResponse<ReviewResDTO.MyReviewRatingListResponse> getMyReviewsByRating(
+            @RequestParam Long userId,
+            @RequestParam(required = false) Double ratingCursor,
+            @RequestParam(required = false) Long reviewIdCursor,
+            @RequestParam(defaultValue = "5") Integer size
+    ) {
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.MY_REVIEWS_OK,
+                reviewService.getMyReviewsByRating(
+                        userId,
+                        ratingCursor,
+                        reviewIdCursor,
+                        size
+                )
+        );
+    }
 }
