@@ -54,7 +54,7 @@ public class MissionController {
     }
 
     // w7 : 진행 중 미션 조회 (오프셋)
-    @PostMapping("/users/missions/in-progress")
+    @PostMapping("/missions/in-progress")
     public ApiResponse<MissionResDTO.PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
             @RequestBody MissionReqDTO.MyMissionRequest request,
             @RequestParam Integer pageSize,
