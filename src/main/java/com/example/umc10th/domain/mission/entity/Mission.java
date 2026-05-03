@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.mission.entity;
 
-import com.example.umc10th.domain.mission.entity.mapping.MissionCompleted;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -22,7 +22,7 @@ import java.util.List;
 public class Mission extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 성공 조건
@@ -45,7 +45,7 @@ public class Mission extends BaseEntity {
 
     // 연관 관계
     @OneToMany(mappedBy = "mission")
-    private List<MissionCompleted> completedList = new ArrayList<>();
+    private List<UserMission> completedList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")

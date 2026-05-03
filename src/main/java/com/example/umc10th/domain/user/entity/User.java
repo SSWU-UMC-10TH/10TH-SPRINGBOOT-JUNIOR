@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.user.entity;
 
-import com.example.umc10th.domain.mission.entity.mapping.MissionCompleted;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.user.entity.mapping.UserFoodPreference;
 import com.example.umc10th.domain.user.entity.mapping.UserRegionProgress;
 import com.example.umc10th.domain.user.entity.mapping.UserTermsAgreement;
@@ -26,8 +26,7 @@ import java.util.List;
 public class User extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    // sequence : INSERT하기 전에 미리 ID를 하나 뽑아와 넣는다.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "email", nullable = false)
@@ -78,7 +77,7 @@ public class User extends BaseEntity {
     private List<UserFoodPreference> foodPreferenceList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    private List<MissionCompleted> completedList = new ArrayList<>();
+    private List<UserMission> completedList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<UserRegionProgress> progressList = new ArrayList<>();
