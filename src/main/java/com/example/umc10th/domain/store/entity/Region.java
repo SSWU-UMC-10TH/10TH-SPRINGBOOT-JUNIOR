@@ -31,8 +31,4 @@ public class Region extends BaseEntity {
 
     @Column(name = "reward_point", nullable = false)
     private Long rewardPoint;
-
-    // 연관 관계
-    @OneToMany
-    private List<UserRegionProgress> progressList = new ArrayList<>();
 }

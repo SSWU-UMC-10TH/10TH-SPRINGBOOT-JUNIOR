@@ -25,8 +25,4 @@ public class FoodCategory extends BaseEntity {
 
     @Column(name = "category_name", nullable = false)
     private String categoryName;
-
-    // 연관 관계
-    @OneToMany(mappedBy = "foodCategory")
-    private List<UserFoodPreference> foodPreferenceList = new ArrayList<>();
 }

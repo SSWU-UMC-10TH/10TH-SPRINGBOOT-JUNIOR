@@ -68,17 +68,4 @@ public class User extends BaseEntity {
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
-
-    // 연관 관계
-    @OneToMany(mappedBy = "user")
-    private List<UserTermsAgreement> termAgreementList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<UserFoodPreference> foodPreferenceList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<UserMission> completedList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<UserRegionProgress> progressList = new ArrayList<>();
 }

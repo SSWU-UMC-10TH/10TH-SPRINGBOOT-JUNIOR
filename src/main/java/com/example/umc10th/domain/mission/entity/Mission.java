@@ -44,9 +44,6 @@ public class Mission extends BaseEntity {
     private LocalDate endDate;
 
     // 연관 관계
-    @OneToMany(mappedBy = "mission")
-    private List<UserMission> completedList = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;

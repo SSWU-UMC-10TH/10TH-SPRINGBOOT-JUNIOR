@@ -33,8 +33,4 @@ public class Term extends BaseEntity {
     @Column(name = "is_required", nullable = false)
     @Builder.Default
     private Boolean isRequired = true;
-
-    // 연관 관계
-    @OneToMany(mappedBy = "term")
-    private List<UserTermsAgreement> termAgreementList = new ArrayList<>();
 }
