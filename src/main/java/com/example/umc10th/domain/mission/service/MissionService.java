@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.mission.service;
 
+import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
@@ -8,6 +9,10 @@ import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MissionCompletedRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
 import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.domain.user.entity.User;
+import com.example.umc10th.domain.user.exceptions.code.UserErrorCode;
+import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.apiPayload.exception.ProjectException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +28,7 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final MissionCompletedRepository missionCompletedRepository;
+    private final UserRepository userRepository;
 
     public MissionResDTO.GetHome getHome(MissionReqDTO.GetHome dto, Long cursor, Integer size) {
 
@@ -91,11 +97,14 @@ public class MissionService {
 
     public MissionResDTO.GetMission getMission(Long userId, Status status, Long cursor, Integer size) {
 
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ProjectException(UserErrorCode.USER_NOT_FOUND));
+
         Pageable pageable = PageRequest.of(0, size + 1);
 
         List<UserMission> userMissionList =
                 missionCompletedRepository.findMyMissionsByStatusWithCursor(
-                        userId,
+                        user.getId(),
                         status,
                         cursor,
                         pageable
@@ -107,37 +116,16 @@ public class MissionService {
             userMissionList = userMissionList.subList(0, size);
         }
 
-        List<MissionResDTO.GetMissionItem> missions = userMissionList.stream()
-                .map(missionCompleted -> {
-                    Mission mission = missionCompleted.getMission();
-                    Store store = mission.getStore();
-
-                    int dday = (int) ChronoUnit.DAYS.between(
-                            LocalDate.now(),
-                            mission.getEndDate()
-                    );
-
-                    return MissionResDTO.GetMissionItem.builder()
-                            .user_mission_id(missionCompleted.getId())
-                            .mission_id(mission.getId())
-                            .store_name(store.getName())
-                            .condition_amount(mission.getConditionAmount())
-                            .reward_point(mission.getRewardPoint())
-                            .status(missionCompleted.getStatus())
-                            .dday(dday)
-                            .build();
-                })
-                .toList();
+        List<MissionResDTO.GetMissionItem> missions =
+                userMissionList.stream()
+                        .map(MissionConverter::toGetMissionItem)
+                        .toList();
 
         Long nextCursor = missions.isEmpty()
                 ? null
                 : missions.get(missions.size() - 1).user_mission_id();
 
-        return MissionResDTO.GetMission.builder()
-                .missions(missions)
-                .cursor(nextCursor)
-                .hasNext(hasNext)
-                .build();
+        return MissionConverter.toGetMission(missions, nextCursor, hasNext);
     }
 
     public MissionResDTO.CompletedMissionStatus patchCompleted(MissionReqDTO.CompletedMissionStatus dto) {
