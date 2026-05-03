@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.user.entity;
 
 import com.example.umc10th.domain.user.entity.mapping.UserFoodPreference;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "food_category")
-public class FoodCategory {
+public class FoodCategory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

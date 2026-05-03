@@ -3,6 +3,7 @@ package com.example.umc10th.domain.mission.entity.mapping;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.user.entity.User;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_mission")
-public class UserMission {
+public class UserMission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

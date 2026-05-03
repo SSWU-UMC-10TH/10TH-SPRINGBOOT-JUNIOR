@@ -2,6 +2,7 @@ package com.example.umc10th.domain.user.entity.mapping;
 
 import com.example.umc10th.domain.user.entity.Term;
 import com.example.umc10th.domain.user.entity.User;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user_terms_agreement")
-public class UserTermsAgreement {
+public class UserTermsAgreement extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

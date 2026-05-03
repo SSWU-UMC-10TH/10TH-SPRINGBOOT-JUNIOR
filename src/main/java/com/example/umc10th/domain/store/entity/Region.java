@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.store.entity;
 
 import com.example.umc10th.domain.user.entity.mapping.UserRegionProgress;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "region")
-public class Region {
+public class Region extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
