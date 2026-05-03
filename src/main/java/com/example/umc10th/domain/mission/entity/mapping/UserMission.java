@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "mission_completed")
-public class MissionCompleted {
+@Table(name = "user_mission")
+public class UserMission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
