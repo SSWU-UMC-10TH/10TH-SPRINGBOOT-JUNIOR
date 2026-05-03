@@ -4,8 +4,6 @@ import com.example.umc10th.domain.review.converter.ReviewConverter;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.entity.Review;
-import com.example.umc10th.domain.review.exception.ReviewException;
-import com.example.umc10th.domain.review.exception.code.ReviewErrorCode;
 import com.example.umc10th.domain.review.repository.ReviewRepository;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.store.exception.StoreException;
@@ -18,10 +16,9 @@ import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +31,6 @@ public class ReviewService {
 
     @Transactional
     public ReviewResDTO.CreateReview createReview(ReviewReqDTO.CreateReview request) {
-        validateReview(request);
-
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -47,7 +42,6 @@ public class ReviewService {
                 .store(store)
                 .content(request.content())
                 .rating(request.rating())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         reviewRepository.save(review);
@@ -66,13 +60,32 @@ public class ReviewService {
         return ReviewConverter.toReviewPreviewList(reviewPage);
     }
 
-    private void validateReview(ReviewReqDTO.CreateReview request) {
-        if (request.content() == null || request.content().isBlank()) {
-            throw new ReviewException(ReviewErrorCode.REVIEW_CONTENT_EMPTY);
-        }
+    public ReviewResDTO.CursorPagination getMyReviewsById(
+            ReviewReqDTO.GetMyReviewsById request
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, request.size());
 
-        if (request.rating() == null || request.rating() < 1 || request.rating() > 5) {
-            throw new ReviewException(ReviewErrorCode.REVIEW_RATING_INVALID);
-        }
+        Slice<Review> reviewSlice = reviewRepository.findMyReviewsByIdCursor(
+                request.userId(),
+                request.cursorId(),
+                pageRequest
+        );
+
+        return ReviewConverter.toCursorPagination(reviewSlice);
+    }
+
+    public ReviewResDTO.CursorPagination getMyReviewsByRating(
+            ReviewReqDTO.GetMyReviewsByRating request
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, request.size());
+
+        Slice<Review> reviewSlice = reviewRepository.findMyReviewsByRatingCursor(
+                request.userId(),
+                request.cursorRating(),
+                request.cursorId(),
+                pageRequest
+        );
+
+        return ReviewConverter.toCursorPagination(reviewSlice);
     }
 }

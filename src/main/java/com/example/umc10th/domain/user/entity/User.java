@@ -1,11 +1,11 @@
 package com.example.umc10th.domain.user.entity;
 
 import com.example.umc10th.domain.user.enums.Gender;
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -13,44 +13,39 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "user")
-public class User {
+public class User extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @Column(nullable = false)
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(nullable = false, unique = true, length = 30)
+    @Column(name = "nickname", nullable = false, unique = true, length = 30)
     private String nickname;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(length = 20)
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Column(name = "profile_url")
     private String profileUrl;
 
-    @Column(nullable = false)
+    @Column(name = "point", nullable = false)
     private Long point;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private LocalDateTime deletedAt;
 
     public void updatePoint(Long point) {
         this.point = point;
-        this.updatedAt = LocalDateTime.now();
     }
 }

@@ -21,39 +21,46 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MissionService {
 
-    private final MissionRepository missionRepository;
     private final MissionChoiceRepository missionChoiceRepository;
+    private final MissionRepository missionRepository;
     private final UserRepository userRepository;
 
     public MissionResDTO.MissionPreviewList getMyMissions(MissionReqDTO.GetMyMissions request) {
-        PageRequest pageRequest = PageRequest.of(request.page(), 10);
 
-        Page<MissionChoice> missionChoicePage = missionChoiceRepository.findMyMissions(
-                request.userId(),
-                pageRequest
+        PageRequest pageRequest = PageRequest.of(
+                request.page(),
+                request.size()
         );
+
+        Page<MissionChoice> missionChoicePage =
+                missionChoiceRepository.findByUserUserIdAndSuccessFalseOrderByStartedAtDesc(
+                        request.userId(),
+                        pageRequest
+                );
 
         return MissionConverter.toMissionPreviewList(missionChoicePage);
     }
 
     @Transactional
-    public MissionResDTO.ChallengeMission challengeMission(MissionReqDTO.ChallengeMission request) {
+    public MissionResDTO.ChallengeMission challengeMission(
+            MissionReqDTO.ChallengeMission request
+    ) {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         Mission mission = missionRepository.findById(request.missionId())
                 .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
 
-        Boolean alreadyChallenged = missionChoiceRepository.existsByUserUserIdAndMissionMissionId(
-                request.userId(),
-                request.missionId()
-        );
+        Boolean alreadyChallenged =
+                missionChoiceRepository.existsByUserUserIdAndMissionMissionId(
+                        request.userId(),
+                        request.missionId()
+                );
 
         if (alreadyChallenged) {
             throw new MissionException(MissionErrorCode.MISSION_ALREADY_CHALLENGED);

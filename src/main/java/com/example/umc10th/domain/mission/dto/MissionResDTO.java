@@ -24,9 +24,15 @@ public class MissionResDTO {
     @Builder
     public record MissionPreviewList(
             List<MissionPreview> missionList,
+
             Integer listSize,
+
+            Integer currentPage,
+            Integer pageSize,
+
             Integer totalPage,
             Long totalElements,
+
             Boolean isFirst,
             Boolean isLast
     ) {

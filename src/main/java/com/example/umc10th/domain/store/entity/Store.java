@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.store.entity;
 
+import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "store")
-public class Store {
+public class Store extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +21,4 @@ public class Store {
     @Column(nullable = false, length = 100)
     private String storeName;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    private LocalDateTime deletedAt;
 }

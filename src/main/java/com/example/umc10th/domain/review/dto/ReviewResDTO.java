@@ -1,34 +1,29 @@
 package com.example.umc10th.domain.review.dto;
 
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ReviewResDTO {
 
-    @Builder
     public record CreateReview(
             Long reviewId,
             Long userId,
             Long storeId,
             String content,
-            Float rating,
+            Double rating,
             LocalDateTime createdAt
     ) {
     }
 
-    @Builder
     public record ReviewPreview(
             Long reviewId,
             String nickname,
             String content,
-            Float rating,
+            Double rating,
             LocalDateTime createdAt
     ) {
     }
 
-    @Builder
     public record ReviewPreviewList(
             List<ReviewPreview> reviewList,
             Integer listSize,
@@ -36,6 +31,24 @@ public class ReviewResDTO {
             Long totalElements,
             Boolean isFirst,
             Boolean isLast
+    ) {
+    }
+
+    public record MyReview(
+            Long reviewId,
+            String storeName,
+            String content,
+            Double rating,
+            LocalDateTime createdAt
+    ) {
+    }
+
+    public record CursorPagination(
+            List<MyReview> reviewList,
+            Integer listSize,
+            Boolean hasNext,
+            Long nextCursorId,
+            Double nextCursorRating
     ) {
     }
 }

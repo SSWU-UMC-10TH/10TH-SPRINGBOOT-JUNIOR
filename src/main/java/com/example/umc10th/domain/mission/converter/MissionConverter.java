@@ -23,6 +23,7 @@ public class MissionConverter {
     }
 
     public static MissionResDTO.MissionPreviewList toMissionPreviewList(Page<MissionChoice> missionChoicePage) {
+
         List<MissionResDTO.MissionPreview> missionList = missionChoicePage.stream()
                 .map(MissionConverter::toMissionPreview)
                 .toList();
@@ -30,6 +31,10 @@ public class MissionConverter {
         return MissionResDTO.MissionPreviewList.builder()
                 .missionList(missionList)
                 .listSize(missionList.size())
+
+                .currentPage(missionChoicePage.getNumber())
+                .pageSize(missionChoicePage.getSize())
+
                 .totalPage(missionChoicePage.getTotalPages())
                 .totalElements(missionChoicePage.getTotalElements())
                 .isFirst(missionChoicePage.isFirst())
