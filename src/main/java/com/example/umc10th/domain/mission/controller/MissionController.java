@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MissionController {
 
     private final MissionService missionService;
 
     // 홈 화면 조회
-    @PostMapping("/v1/home")
+    @PostMapping("/home")
     public ApiResponse<MissionResDTO.MissionHomeResponse> getHome(
             @RequestBody MissionReqDTO.MissionHomeRequest dto,
             @RequestParam(required = false) Long cursor,
@@ -30,7 +30,7 @@ public class MissionController {
     }
 
     // 사용자별 진행중/진행 완료 미션 조회
-    @PostMapping("/v1/missions")
+    @PostMapping("/missions")
     public ApiResponse<MissionResDTO.UserMissionListResponse> getMissions(
             @RequestBody MissionReqDTO.UserMissionRequest dto,
             @RequestParam Status status,
@@ -45,7 +45,7 @@ public class MissionController {
     }
 
     // 미션 성공 COMPLETED 처리
-    @PostMapping("v1/completed")
+    @PostMapping("/completed")
     public ApiResponse<MissionResDTO.MissionStatusUpdateResponse> patchCompleted(
             @RequestBody MissionReqDTO.MissionStatusUpdateRequest dto
     ) {
@@ -54,14 +54,13 @@ public class MissionController {
     }
 
     // w7 : 진행 중 미션 조회 (오프셋)
-    @PostMapping("/v1/users/missions/in-progress")
+    @PostMapping("/users/missions/in-progress")
     public ApiResponse<MissionResDTO.PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
             @RequestBody MissionReqDTO.MyMissionRequest request,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
             @RequestParam(required = false) String sort
     ) {
-
         return ApiResponse.onSuccess(
                 GeneralSuccessCode.OK,
                 missionService.getMyInProgressMissions(

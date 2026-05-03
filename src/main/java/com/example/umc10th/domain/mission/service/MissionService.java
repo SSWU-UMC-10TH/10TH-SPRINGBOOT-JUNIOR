@@ -147,6 +147,9 @@ public class MissionService {
             Integer pageNumber,
             String sort
     ) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ProjectException(UserErrorCode.USER_NOT_FOUND));
+
         Sort sortInfo = sort != null
                 ? Sort.by(sort).descending()
                 : Sort.by("id").descending();
@@ -154,7 +157,7 @@ public class MissionService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortInfo);
 
         Page<UserMission> page =
-                userMissionRepository.findAllByUser_IdAndStatus(
+                userMissionRepository.findAllByUserIdAndStatusWithPaging(
                         userId,
                         Status.IN_PROGRESS,
                         pageRequest
@@ -171,6 +174,8 @@ public class MissionService {
                 page.getSize()
         );
     }
+
+
 
     public MissionResDTO.MissionStatusUpdateResponse patchCompleted(
             MissionReqDTO.MissionStatusUpdateRequest dto

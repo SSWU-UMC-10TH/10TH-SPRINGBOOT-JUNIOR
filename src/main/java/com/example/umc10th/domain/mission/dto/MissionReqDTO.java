@@ -26,7 +26,7 @@ public class MissionReqDTO {
             Long userId
     ) {}
 
-    // 내 미션 조회 요청
+    // w7 : 진행 중인 내 미션 조회 요청
     public record MyMissionRequest(
 
             @NotNull(message = "사용자 ID는 필수입니다.")

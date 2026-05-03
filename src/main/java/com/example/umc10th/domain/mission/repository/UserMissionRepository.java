@@ -31,10 +31,17 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
             Pageable pageable
     );
 
-    // w7 : 오프셋 기반
-    Page<UserMission> findAllByUser_IdAndStatus(
-            Long userId,
-            Status status,
+    @Query("""
+    SELECT um
+    FROM UserMission um
+    JOIN FETCH um.mission m
+    JOIN FETCH m.store s
+    WHERE um.user.id = :userId
+      AND um.status = :status
+""")
+    Page<UserMission> findAllByUserIdAndStatusWithPaging(
+            @Param("userId") Long userId,
+            @Param("status") Status status,
             Pageable pageable
     );
 }

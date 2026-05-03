@@ -25,6 +25,7 @@ public class UserMission extends BaseEntity {
     private Long id;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     // 수행 시작일

@@ -11,6 +11,7 @@ import java.util.List;
 
 public class MissionConverter {
 
+    // w7 : 진행 중인 내 미션 조회
     public static MissionResDTO.UserMissionResponse toUserMissionResponse(UserMission userMission) {
 
         Mission mission = userMission.getMission();

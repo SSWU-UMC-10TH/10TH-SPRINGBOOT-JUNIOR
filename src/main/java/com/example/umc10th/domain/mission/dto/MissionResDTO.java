@@ -17,7 +17,7 @@ public class MissionResDTO {
             Integer dday
     ) {}
 
-    // 사용자 미션 아이템 응답
+    // w7 : 진행 중인 미션 조회
     public record UserMissionResponse(
             Long userMissionId,
             Long missionId,
@@ -26,6 +26,13 @@ public class MissionResDTO {
             Integer rewardPoint,
             Status status,
             Integer dday
+    ) {}
+
+    // 오프셋 페이징 응답
+    public record PageResponse<T>(
+            List<T> data,
+            Integer pageNumber,
+            Integer pageSize
     ) {}
 
     // 홈 조회 응답
@@ -45,12 +52,6 @@ public class MissionResDTO {
             Boolean hasNext
     ) {}
 
-    // 오프셋 페이징 응답
-    public record PageResponse<T>(
-            List<T> data,
-            Integer pageNumber,
-            Integer pageSize
-    ) {}
 
     // 미션 상태 변경 응답
     public record MissionStatusUpdateResponse(
