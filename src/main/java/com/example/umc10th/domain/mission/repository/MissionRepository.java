@@ -21,7 +21,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
           AND (:cursor IS NULL OR m.id < :cursor)
           AND NOT EXISTS (
               SELECT mc.id
-              FROM MissionCompleted mc
+              FROM UserMission mc
               WHERE mc.mission = m
                 AND mc.user.id = :userId
           )
@@ -45,7 +45,7 @@ public interface MissionRepository extends JpaRepository<Mission, Long> {
 
     @Query("""
         SELECT COUNT(mc)
-        FROM MissionCompleted mc
+        FROM UserMission mc
         JOIN mc.mission m
         JOIN m.store s
         JOIN s.region r

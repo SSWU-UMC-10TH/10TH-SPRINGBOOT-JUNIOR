@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.review.service;
 
-import com.example.umc10th.domain.mission.entity.mapping.MissionCompleted;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.repository.MissionCompletedRepository;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
@@ -31,15 +31,15 @@ public class ReviewService {
             ReviewReqDTO.CreateReview dto,
             List<MultipartFile> images
     ) {
-        MissionCompleted missionCompleted = missionCompletedRepository.findById(userMissionId)
+        UserMission userMission = missionCompletedRepository.findById(userMissionId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.MISSION_COMPLETED_NOT_FOUND));
 
         // 별점은 0 이상 5 이하
         if (dto.rating() == null || dto.rating() < 0 || dto.rating() > 5) {
             throw new ReviewException(ReviewErrorCode.INVALID_RATING);
         }
-        User user = missionCompleted.getUser();
-        Store store = missionCompleted.getMission().getStore();
+        User user = userMission.getUser();
+        Store store = userMission.getMission().getStore();
 
         Review review = Review.builder()
                 .content(dto.content())
@@ -54,7 +54,7 @@ public class ReviewService {
 
         return ReviewResDTO.CreateReview.builder()
                 .review_id(savedReview.getId())
-                .user_mission_id(missionCompleted.getId())
+                .user_mission_id(userMission.getId())
                 .store_name(store.getName())
                 .rating(savedReview.getRating())
                 .content(savedReview.getContent())

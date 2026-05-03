@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.mission.repository;
 
-import com.example.umc10th.domain.mission.entity.mapping.MissionCompleted;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @Repository
-public interface MissionCompletedRepository extends JpaRepository<MissionCompleted, Long> {
+public interface MissionCompletedRepository extends JpaRepository<UserMission, Long> {
 
     @Query("""
         SELECT mc
-        FROM MissionCompleted mc
+        FROM UserMission mc
         JOIN FETCH mc.mission m
         JOIN FETCH m.store s
         WHERE mc.user.id = :userId
@@ -23,7 +23,7 @@ public interface MissionCompletedRepository extends JpaRepository<MissionComplet
           AND (:cursor IS NULL OR mc.id < :cursor)
         ORDER BY mc.id DESC
     """)
-    List<MissionCompleted> findMyMissionsByStatusWithCursor(
+    List<UserMission> findMyMissionsByStatusWithCursor(
             @Param("userId") Long userId,
             @Param("status") Status status,
             @Param("cursor") Long cursor,

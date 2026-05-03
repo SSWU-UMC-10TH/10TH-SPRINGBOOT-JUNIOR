@@ -3,7 +3,7 @@ package com.example.umc10th.domain.mission.service;
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
-import com.example.umc10th.domain.mission.entity.mapping.MissionCompleted;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MissionCompletedRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
@@ -93,7 +93,7 @@ public class MissionService {
 
         Pageable pageable = PageRequest.of(0, size + 1);
 
-        List<MissionCompleted> missionCompletedList =
+        List<UserMission> userMissionList =
                 missionCompletedRepository.findMyMissionsByStatusWithCursor(
                         userId,
                         status,
@@ -101,13 +101,13 @@ public class MissionService {
                         pageable
                 );
 
-        boolean hasNext = missionCompletedList.size() > size;
+        boolean hasNext = userMissionList.size() > size;
 
         if (hasNext) {
-            missionCompletedList = missionCompletedList.subList(0, size);
+            userMissionList = userMissionList.subList(0, size);
         }
 
-        List<MissionResDTO.GetMissionItem> missions = missionCompletedList.stream()
+        List<MissionResDTO.GetMissionItem> missions = userMissionList.stream()
                 .map(missionCompleted -> {
                     Mission mission = missionCompleted.getMission();
                     Store store = mission.getStore();
