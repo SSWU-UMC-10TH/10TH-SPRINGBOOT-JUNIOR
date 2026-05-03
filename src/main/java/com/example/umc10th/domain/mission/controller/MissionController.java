@@ -8,6 +8,7 @@ import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class MissionController {
     // 홈 화면 조회
     @PostMapping("/home")
     public ApiResponse<MissionResDTO.MissionHomeResponse> getHome(
-            @RequestBody MissionReqDTO.MissionHomeRequest dto,
+            @Valid @RequestBody MissionReqDTO.MissionHomeRequest dto,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") Integer size
     ) {
@@ -32,7 +33,7 @@ public class MissionController {
     // 사용자별 진행중/진행 완료 미션 조회
     @PostMapping("/missions")
     public ApiResponse<MissionResDTO.UserMissionListResponse> getMissions(
-            @RequestBody MissionReqDTO.UserMissionRequest dto,
+            @Valid @RequestBody MissionReqDTO.UserMissionRequest dto,
             @RequestParam Status status,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") Integer size
@@ -47,7 +48,7 @@ public class MissionController {
     // 미션 성공 COMPLETED 처리
     @PostMapping("/completed")
     public ApiResponse<MissionResDTO.MissionStatusUpdateResponse> patchCompleted(
-            @RequestBody MissionReqDTO.MissionStatusUpdateRequest dto
+            @Valid @RequestBody MissionReqDTO.MissionStatusUpdateRequest dto
     ) {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(code, missionService.patchCompleted(dto));
@@ -56,7 +57,7 @@ public class MissionController {
     // w7 : 진행 중 미션 조회 (오프셋)
     @PostMapping("/missions/in-progress")
     public ApiResponse<MissionResDTO.PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
-            @RequestBody MissionReqDTO.MyMissionRequest request,
+            @Valid @RequestBody MissionReqDTO.MyMissionRequest request,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,
             @RequestParam(required = false) String sort
