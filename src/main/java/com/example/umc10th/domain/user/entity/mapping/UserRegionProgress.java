@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.user.entity.mapping;
 
-import com.example.umc10th.domain.user.entity.FoodCategory;
+import com.example.umc10th.domain.store.entity.Region;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -14,18 +14,20 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_food_preference")
-public class UserFoodPreference extends BaseEntity {
+@Table(name = "user_region_progress")
+public class UserRegionProgress extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "mission_count", nullable = false)
+    private Long missionCount;
+
+    // 연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Region region;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "food_category_id")
-    private FoodCategory foodCategory;
+    private User user;
 }

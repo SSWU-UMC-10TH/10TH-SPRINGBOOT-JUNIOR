@@ -1,6 +1,6 @@
 package com.example.umc10th.domain.mission.dto;
 
-import com.example.umc10th.domain.mission.enums.status;
+import com.example.umc10th.domain.mission.enums.Status;
 
 public class MissionReqDTO {
 
@@ -19,6 +19,6 @@ public class MissionReqDTO {
     public record CompletedMissionStatus(
             Long user_id,
             Long mission_completed_id,
-            status status // COMPLETED
+            Status status // COMPLETED
     ) {}
 }
