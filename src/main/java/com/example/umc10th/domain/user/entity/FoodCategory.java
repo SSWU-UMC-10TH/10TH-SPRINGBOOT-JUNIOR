@@ -1,15 +1,11 @@
 package com.example.umc10th.domain.user.entity;
 
-import com.example.umc10th.domain.user.entity.mapping.UserFoodPreference;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

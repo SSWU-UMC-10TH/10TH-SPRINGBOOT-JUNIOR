@@ -1,6 +1,5 @@
 package com.example.umc10th.domain.mission.entity;
 
-import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -10,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

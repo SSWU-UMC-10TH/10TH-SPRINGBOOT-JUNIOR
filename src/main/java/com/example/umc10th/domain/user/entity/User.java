@@ -1,9 +1,5 @@
 package com.example.umc10th.domain.user.entity;
 
-import com.example.umc10th.domain.mission.entity.mapping.UserMission;
-import com.example.umc10th.domain.user.entity.mapping.UserFoodPreference;
-import com.example.umc10th.domain.user.entity.mapping.UserRegionProgress;
-import com.example.umc10th.domain.user.entity.mapping.UserTermsAgreement;
 import com.example.umc10th.domain.user.enums.Gender;
 import com.example.umc10th.domain.user.enums.SocialType;
 import com.example.umc10th.global.entity.BaseEntity;
@@ -14,8 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
