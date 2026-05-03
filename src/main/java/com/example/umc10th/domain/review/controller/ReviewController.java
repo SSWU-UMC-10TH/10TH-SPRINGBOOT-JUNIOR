@@ -15,13 +15,13 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     @PostMapping(
-            value = "/v1/my-page/completed-missions/{userMissionId}/reviews",
+            value = "/my-page/completed-missions/{userMissionId}/reviews",
 
             // 리뷰 이미지를 multipartfile로 받겠다는 뜻
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -30,7 +30,7 @@ public class ReviewController {
             @RequestPart("review") ReviewReqDTO.CreateReview dto,
             @RequestPart(value="images", required=false) List<MultipartFile> images
     ) {
-        BaseSuccessCode code = ReviewSuccessCode.OK;
+        BaseSuccessCode code = ReviewSuccessCode.CREATED;
         return ApiResponse.onSuccess(code, reviewService.createReview(userMissionId, dto, images));
     }
 }

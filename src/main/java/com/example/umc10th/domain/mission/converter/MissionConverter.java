@@ -10,7 +10,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class MissionConverter {
-    public static MissionResDTO.GetMissionItem toGetMissionItem(UserMission userMission) {
+
+    public static MissionResDTO.UserMissionResponse toUserMissionResponse(UserMission userMission) {
 
         Mission mission = userMission.getMission();
         Store store = mission.getStore();
@@ -20,26 +21,26 @@ public class MissionConverter {
                 mission.getEndDate()
         );
 
-        return MissionResDTO.GetMissionItem.builder()
-                .user_mission_id(userMission.getId())
-                .mission_id(mission.getId())
-                .store_name(store.getName())
-                .condition_amount(mission.getConditionAmount())
-                .reward_point(mission.getRewardPoint())
-                .status(userMission.getStatus())
-                .dday(dday)
-                .build();
+        return new MissionResDTO.UserMissionResponse(
+                userMission.getId(),
+                mission.getId(),
+                store.getName(),
+                mission.getConditionAmount(),
+                mission.getRewardPoint(),
+                userMission.getStatus(),
+                dday
+        );
     }
 
-    public static MissionResDTO.GetMission toGetMission(
-            List<MissionResDTO.GetMissionItem> missions,
+    public static MissionResDTO.UserMissionListResponse toUserMissionListResponse(
+            List<MissionResDTO.UserMissionResponse> missions,
             Long cursor,
-            boolean hasNext
+            Boolean hasNext
     ) {
-        return MissionResDTO.GetMission.builder()
-                .missions(missions)
-                .cursor(cursor)
-                .hasNext(hasNext)
-                .build();
+        return new MissionResDTO.UserMissionListResponse(
+                missions,
+                cursor,
+                hasNext
+        );
     }
 }

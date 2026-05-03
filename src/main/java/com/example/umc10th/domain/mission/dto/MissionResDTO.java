@@ -1,16 +1,14 @@
 package com.example.umc10th.domain.mission.dto;
 
 import com.example.umc10th.domain.mission.enums.Status;
-import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class MissionResDTO {
 
-    // 홈 화면의 지역별 미션 보상 조건 조회
-    @Builder
-    public record GetHomeMission (
+    // 홈 화면 미션 아이템 응답
+    public record HomeMissionResponse(
             Long missionId,
             String storeName,
             String category,
@@ -19,54 +17,47 @@ public class MissionResDTO {
             Integer dday
     ) {}
 
-    // 미션 정보 조회
-    @Builder
-    public record GetMissionItem(
-            Long user_mission_id,
-            Long mission_id,
-            String store_name,
-            Integer condition_amount,
-            Integer reward_point,
+    // 사용자 미션 아이템 응답
+    public record UserMissionResponse(
+            Long userMissionId,
+            Long missionId,
+            String storeName,
+            Integer conditionAmount,
+            Integer rewardPoint,
             Status status,
             Integer dday
     ) {}
 
-    // 홈 조회
-    @Builder
-    public record GetHome (
-            // 선택된 지역 이름 ex."안암동"
+    // 홈 조회 응답
+    public record MissionHomeResponse(
             String regionName,
-
-            // "안암동에서 사용자가 수행한 미션 개수
             Integer completedMissionCount,
-
-            // "안암동"에서 사용자가 이만큼 수행하면 포인트 제공하는 미션 개수
             Integer totalMissionCount,
-
-            // "안암동"에서 사용자가 아직 수행하지 않은 미션 목록들
-            List<GetHomeMission> missions,
-
+            List<HomeMissionResponse> missions,
             Long cursor,
             Boolean hasNext
     ) {}
 
-    // 사용자별 진행중/진행 완료 미션 조회
-    @Builder
-    public record GetMission(
-            List<GetMissionItem> missions,
+    // 사용자별 진행중/진행 완료 미션 조회 응답
+    public record UserMissionListResponse(
+            List<UserMissionResponse> missions,
             Long cursor,
-
-            // 다음 데이터가 있는지 나타냄
             Boolean hasNext
     ) {}
 
-    // 미션 성공 completed 처리 (patch)
-    @Builder
-    public record CompletedMissionStatus(
-            Long mission_id,
-            Long mission_completed_id,
+    // 오프셋 페이징 응답
+    public record PageResponse<T>(
+            List<T> data,
+            Integer pageNumber,
+            Integer pageSize
+    ) {}
+
+    // 미션 상태 변경 응답
+    public record MissionStatusUpdateResponse(
+            Long missionId,
+            Long missionCompletedId,
             Status status,
-            LocalDateTime completed_at, // COMPLETED로 변경된 시간
-            LocalDateTime requested_at // 사장님 인증 번호 요청 시간
+            LocalDateTime completedAt,
+            LocalDateTime requestedAt
     ) {}
 }

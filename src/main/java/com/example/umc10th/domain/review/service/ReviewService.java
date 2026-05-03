@@ -1,7 +1,7 @@
 package com.example.umc10th.domain.review.service;
 
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
-import com.example.umc10th.domain.mission.repository.MissionCompletedRepository;
+import com.example.umc10th.domain.mission.repository.UserMissionRepository;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.entity.Review;
@@ -24,14 +24,14 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final MissionCompletedRepository missionCompletedRepository;
+    private final UserMissionRepository userMissionRepository;
 
     public ReviewResDTO.CreateReview createReview(
             Long userMissionId,
             ReviewReqDTO.CreateReview dto,
             List<MultipartFile> images
     ) {
-        UserMission userMission = missionCompletedRepository.findById(userMissionId)
+        UserMission userMission = userMissionRepository.findById(userMissionId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.MISSION_COMPLETED_NOT_FOUND));
 
         // 별점은 0 이상 5 이하
