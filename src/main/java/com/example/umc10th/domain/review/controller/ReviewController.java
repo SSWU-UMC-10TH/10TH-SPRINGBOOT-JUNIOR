@@ -6,13 +6,17 @@ import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -38,8 +42,8 @@ public class ReviewController {
     @GetMapping("/users/reviews")
     public ApiResponse<ReviewResDTO.MyReviewListResponse> getMyReviewsById(
             @RequestParam Long userId,
-            @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "5") Integer size
+            @RequestParam(required = false) @Min(1) Long cursor,
+            @RequestParam(defaultValue = "5") @Max(10) Integer size
     ) {
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.MY_REVIEWS_OK,
@@ -51,9 +55,9 @@ public class ReviewController {
     @GetMapping("/users/reviews/rating")
     public ApiResponse<ReviewResDTO.MyReviewRatingListResponse> getMyReviewsByRating(
             @RequestParam Long userId,
-            @RequestParam(required = false) Double ratingCursor,
-            @RequestParam(required = false) Long reviewIdCursor,
-            @RequestParam(defaultValue = "5") Integer size
+            @RequestParam(required = false) @Min(1) Double ratingCursor,
+            @RequestParam(required = false) @Min(1) Long reviewIdCursor,
+            @RequestParam(defaultValue = "1") @Max(10) Integer size
     ) {
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.MY_REVIEWS_OK,
