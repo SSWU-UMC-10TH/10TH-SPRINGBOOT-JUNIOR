@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.mission.converter;
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
+import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
@@ -34,8 +35,8 @@ public class MissionConverter {
     }
 
     // w7 피드백 (dto projection)
-    public static MissionResDTO.UserMissionResponse toUserMissionResponse(
-            MissionResDTO.UserMissionQueryDTO userMission
+    public static MissionResDTO.UserMissionResponse toUserMissionResponseFromQuery(
+            UserMissionQueryDTO userMission
     ) {
         int dday = (int) ChronoUnit.DAYS.between(
                 LocalDate.now(),

@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.mission.repository;
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
+import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ import java.util.List;
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
     @Query("""
-    SELECT new com.example.umc10th.domain.mission.dto.MissionResDTO.UserMissionQueryDTO(
+    SELECT new com.example.umc10th.domain.mission.dto.UserMissionQueryDTO(
         mc.id,
         s.name,
         m.conditionAmount,
@@ -32,7 +33,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
       AND (:cursor IS NULL OR mc.id < :cursor)
     ORDER BY mc.id DESC
 """)
-    List<MissionResDTO.UserMissionQueryDTO> findMyMissionsByStatusWithCursor(
+    List<UserMissionQueryDTO> findMyMissionsByStatusWithCursor(
             @Param("userId") Long userId,
             @Param("status") Status status,
             @Param("cursor") Long cursor,
@@ -40,7 +41,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
     );
 
     @Query("""
-    SELECT new com.example.umc10th.domain.mission.dto.MissionResDTO.UserMissionQueryDTO(
+    SELECT new com.example.umc10th.domain.mission.dto.UserMissionQueryDTO(
         um.id,
         s.name,
         m.conditionAmount,
@@ -54,7 +55,7 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
     WHERE um.user.id = :userId
       AND um.status = :status
 """)
-    Page<MissionResDTO.UserMissionQueryDTO> findAllByUserIdAndStatusWithPaging(
+    Page<UserMissionQueryDTO> findAllByUserIdAndStatusWithPaging(
             @Param("userId") Long userId,
             @Param("status") Status status,
             Pageable pageable

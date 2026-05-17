@@ -3,7 +3,9 @@ package com.example.umc10th.domain.mission.service;
 import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
+import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
 import com.example.umc10th.domain.mission.repository.UserMissionRepository;
@@ -114,7 +116,7 @@ public class MissionService {
 
         Pageable pageable = PageRequest.of(0, size + 1);
 
-        List<MissionResDTO.UserMissionQueryDTO> userMissionList =
+        List<UserMissionQueryDTO> userMissionList =
                 userMissionRepository.findMyMissionsByStatusWithCursor(
                         user.getId(),
                         status,
@@ -130,7 +132,7 @@ public class MissionService {
 
         List<MissionResDTO.UserMissionResponse> missions =
                 userMissionList.stream()
-                        .map(MissionConverter::toUserMissionResponse)
+                        .map(MissionConverter::toUserMissionResponseFromQuery)
                         .toList();
 
         Long nextCursor = missions.isEmpty()
@@ -157,7 +159,7 @@ public class MissionService {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortInfo);
 
 //      Page<UserMission> page =
-        Page<MissionResDTO.UserMissionQueryDTO> page =
+        Page<UserMissionQueryDTO> page =
                 userMissionRepository.findAllByUserIdAndStatusWithPaging(
                         userId,
                         Status.IN_PROGRESS,
@@ -166,7 +168,7 @@ public class MissionService {
 
         List<MissionResDTO.UserMissionResponse> missions =
                 page.getContent().stream()
-                        .map(MissionConverter::toUserMissionResponse)
+                        .map(MissionConverter::toUserMissionResponseFromQuery)
                         .toList();
 
         return new MissionResDTO.PageResponse<>(

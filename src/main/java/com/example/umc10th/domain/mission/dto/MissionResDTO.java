@@ -29,15 +29,6 @@ public class MissionResDTO {
             Integer dday
     ) {}
 
-    // w7 피드백 (dto projection)
-    public record UserMissionQueryDTO(
-            Long userMissionId,
-            String storeName,
-            Integer conditionAmount,
-            Integer rewardPoint,
-            Status status,
-            LocalDate endDate
-    ) {}
 
     // 오프셋 페이징 응답
     public record PageResponse<T>(
