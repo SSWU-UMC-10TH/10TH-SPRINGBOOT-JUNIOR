@@ -1,7 +1,8 @@
 package com.example.umc10th.domain.review.service;
 
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
-import com.example.umc10th.domain.mission.repository.MissionCompletedRepository;
+import com.example.umc10th.domain.mission.repository.UserMissionRepository;
+import com.example.umc10th.domain.review.converter.ReviewConverter;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.entity.Review;
@@ -12,6 +13,8 @@ import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,14 +27,14 @@ import java.util.List;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final MissionCompletedRepository missionCompletedRepository;
+    private final UserMissionRepository userMissionRepository;
 
     public ReviewResDTO.CreateReview createReview(
             Long userMissionId,
             ReviewReqDTO.CreateReview dto,
             List<MultipartFile> images
     ) {
-        UserMission userMission = missionCompletedRepository.findById(userMissionId)
+        UserMission userMission = userMissionRepository.findById(userMissionId)
                 .orElseThrow(() -> new ReviewException(ReviewErrorCode.MISSION_COMPLETED_NOT_FOUND));
 
         // 별점은 0 이상 5 이하
@@ -60,5 +63,82 @@ public class ReviewService {
                 .content(savedReview.getContent())
                 .imageUrls(imageUrls)
                 .build();
+    }
+
+    // w7 : 내가 작성한 리뷰 조회 - ID 순
+    public ReviewResDTO.MyReviewListResponse getMyReviewsById(
+            Long userId,
+            Long cursor,
+            Integer size
+    ) {
+        Pageable pageable = PageRequest.of(0, size + 1);
+
+        List<Review> reviewList =
+                reviewRepository.findMyReviewsByIdCursor(userId, cursor, pageable);
+
+        boolean hasNext = reviewList.size() > size;
+
+        if (hasNext) {
+            reviewList = reviewList.subList(0, size);
+        }
+
+        List<ReviewResDTO.MyReviewResponse> reviews =
+                reviewList.stream()
+                        .map(ReviewConverter::toMyReviewResponse)
+                        .toList();
+
+        Long nextCursor = reviews.isEmpty()
+                ? null
+                : reviews.get(reviews.size() - 1).reviewId();
+
+        return new ReviewResDTO.MyReviewListResponse(
+                reviews,
+                nextCursor,
+                hasNext
+        );
+    }
+
+    // w7 : 내가 작성한 리뷰 조회 - 별점 순
+    public ReviewResDTO.MyReviewRatingListResponse getMyReviewsByRating(
+            Long userId,
+            Double ratingCursor,
+            Long reviewIdCursor,
+            Integer size
+    ) {
+        Pageable pageable = PageRequest.of(0, size + 1);
+
+        List<Review> reviewList =
+                reviewRepository.findMyReviewsByRatingCursor(
+                        userId,
+                        ratingCursor,
+                        reviewIdCursor,
+                        pageable
+                );
+
+        boolean hasNext = reviewList.size() > size;
+
+        if (hasNext) {
+            reviewList = reviewList.subList(0, size);
+        }
+
+        List<ReviewResDTO.MyReviewResponse> reviews =
+                reviewList.stream()
+                        .map(ReviewConverter::toMyReviewResponse)
+                        .toList();
+
+        Double nextRatingCursor = reviews.isEmpty()
+                ? null
+                : reviews.get(reviews.size() - 1).rating();
+
+        Long nextReviewIdCursor = reviews.isEmpty()
+                ? null
+                : reviews.get(reviews.size() - 1).reviewId();
+
+        return new ReviewResDTO.MyReviewRatingListResponse(
+                reviews,
+                nextRatingCursor,
+                nextReviewIdCursor,
+                hasNext
+        );
     }
 }

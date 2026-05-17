@@ -1,16 +1,18 @@
 package com.example.umc10th.domain.mission.converter;
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
+import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class MissionConverter {
-    public static MissionResDTO.GetMissionItem toGetMissionItem(UserMission userMission) {
+
+    // w7 : 진행 중인 내 미션 조회
+    public static MissionResDTO.UserMissionResponse toUserMissionResponse(UserMission userMission) {
 
         Mission mission = userMission.getMission();
         Store store = mission.getStore();
@@ -20,26 +22,44 @@ public class MissionConverter {
                 mission.getEndDate()
         );
 
-        return MissionResDTO.GetMissionItem.builder()
-                .user_mission_id(userMission.getId())
-                .mission_id(mission.getId())
-                .store_name(store.getName())
-                .condition_amount(mission.getConditionAmount())
-                .reward_point(mission.getRewardPoint())
-                .status(userMission.getStatus())
-                .dday(dday)
-                .build();
+        return new MissionResDTO.UserMissionResponse(
+                userMission.getId(),
+//                mission.getId(),
+                store.getName(),
+                mission.getConditionAmount(),
+                mission.getRewardPoint(),
+                userMission.getStatus(),
+                dday
+        );
     }
 
-    public static MissionResDTO.GetMission toGetMission(
-            List<MissionResDTO.GetMissionItem> missions,
-            Long cursor,
-            boolean hasNext
+    // w7 피드백 (dto projection)
+    public static MissionResDTO.UserMissionResponse toUserMissionResponseFromQuery(
+            UserMissionQueryDTO userMission
     ) {
-        return MissionResDTO.GetMission.builder()
-                .missions(missions)
-                .cursor(cursor)
-                .hasNext(hasNext)
-                .build();
+        int dday = (int) ChronoUnit.DAYS.between(
+                LocalDate.now(),
+                userMission.endDate()
+        );
+
+        return new MissionResDTO.UserMissionResponse(
+                userMission.userMissionId(),
+                userMission.storeName(),
+                userMission.conditionAmount(),
+                userMission.rewardPoint(),
+                userMission.status(),
+                dday
+        );
     }
+
+//    public static MissionResDTO.UserMissionListResponse toUserMissionListResponse(
+//            List<MissionResDTO.UserMissionResponse> missions,
+//            Long cursor,
+//            Boolean hasNext
+//    ) {
+//        return new CursorResponse<>(
+//                missions,
+//                nextCursor,
+//                hasNext
+//        );    }
 }

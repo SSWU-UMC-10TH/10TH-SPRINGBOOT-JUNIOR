@@ -25,6 +25,7 @@ public class UserMission extends BaseEntity {
     private Long id;
 
     @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     // 수행 시작일
@@ -32,7 +33,7 @@ public class UserMission extends BaseEntity {
     private LocalDateTime joinedAt;
 
     // 수행 완료일
-    @Column(name = "completed_at", nullable = false)
+    @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
     // 인증 요청일

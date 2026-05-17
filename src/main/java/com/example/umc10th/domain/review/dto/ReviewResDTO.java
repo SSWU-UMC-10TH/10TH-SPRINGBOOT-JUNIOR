@@ -26,4 +26,29 @@ public class ReviewResDTO {
             String nickname,
             String createdAt
     ) {}
+
+    // w7 : 내가 작성한 리뷰 조회 응답 아이템
+    public record MyReviewResponse(
+            Long reviewId,
+            String storeName,
+            String content,
+            Double rating,
+            String nickname,
+            String createdAt
+    ) {}
+
+    // w7 : 내가 작성한 리뷰 ID 순 조회 응답
+    public record MyReviewListResponse(
+            List<MyReviewResponse> reviews,
+            Long cursor,
+            Boolean hasNext
+    ) {}
+
+    // w7 : 내가 작성한 리뷰 별점 순 조회 응답
+    public record MyReviewRatingListResponse(
+            List<MyReviewResponse> reviews,
+            Double ratingCursor,
+            Long reviewIdCursor,
+            Boolean hasNext
+    ) {}
 }

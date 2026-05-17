@@ -6,22 +6,26 @@ import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class ReviewController {
 
     private final ReviewService reviewService;
 
     @PostMapping(
-            value = "/v1/my-page/completed-missions/{userMissionId}/reviews",
+            value = "/my-page/completed-missions/{userMissionId}/reviews",
 
             // 리뷰 이미지를 multipartfile로 받겠다는 뜻
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -30,7 +34,39 @@ public class ReviewController {
             @RequestPart("review") ReviewReqDTO.CreateReview dto,
             @RequestPart(value="images", required=false) List<MultipartFile> images
     ) {
-        BaseSuccessCode code = ReviewSuccessCode.OK;
+        BaseSuccessCode code = ReviewSuccessCode.CREATED;
         return ApiResponse.onSuccess(code, reviewService.createReview(userMissionId, dto, images));
+    }
+
+    // w7 : 내가 작성한 리뷰 조회 - ID 순
+    @GetMapping("/users/reviews")
+    public ApiResponse<ReviewResDTO.MyReviewListResponse> getMyReviewsById(
+            @RequestParam Long userId,
+            @RequestParam(required = false) @Min(1) Long cursor,
+            @RequestParam(defaultValue = "5") @Max(10) Integer size
+    ) {
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.MY_REVIEWS_OK,
+                reviewService.getMyReviewsById(userId, cursor, size)
+        );
+    }
+
+    // w7 : 내가 작성한 리뷰 조회 - 별점 순
+    @GetMapping("/users/reviews/rating")
+    public ApiResponse<ReviewResDTO.MyReviewRatingListResponse> getMyReviewsByRating(
+            @RequestParam Long userId,
+            @RequestParam(required = false) @Min(1) Double ratingCursor,
+            @RequestParam(required = false) @Min(1) Long reviewIdCursor,
+            @RequestParam(defaultValue = "1") @Max(10) Integer size
+    ) {
+        return ApiResponse.onSuccess(
+                ReviewSuccessCode.MY_REVIEWS_OK,
+                reviewService.getMyReviewsByRating(
+                        userId,
+                        ratingCursor,
+                        reviewIdCursor,
+                        size
+                )
+        );
     }
 }

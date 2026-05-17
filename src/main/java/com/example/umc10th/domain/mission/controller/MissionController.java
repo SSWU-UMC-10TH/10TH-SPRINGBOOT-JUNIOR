@@ -7,31 +7,36 @@ import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import com.example.umc10th.global.dto.CursorResponse;
+import com.example.umc10th.global.dto.PageResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class MissionController {
 
     private final MissionService missionService;
 
     // 홈 화면 조회
-    @PostMapping("/v1/home")
-    public ApiResponse<MissionResDTO.GetHome> getHome(
-            @RequestBody MissionReqDTO.GetHome dto,
+    @GetMapping("/home/{userId}")
+    public ApiResponse<MissionResDTO.MissionHomeResponse> getHome(
+            @Valid @PathVariable Long userId,
+            @RequestParam Long regionId,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") Integer size
     ) {
         BaseSuccessCode code = MissionSuccessCode.HOME_OK;
-        return ApiResponse.onSuccess(code, missionService.getHome(dto, cursor, size));
+        return ApiResponse.onSuccess(code, missionService.getHome(userId, regionId, cursor, size));
     }
 
     // 사용자별 진행중/진행 완료 미션 조회
-    @PostMapping("/v1/missions")
-    public ApiResponse<MissionResDTO.GetMission> getMissions(
-            @RequestBody MissionReqDTO.GetMission dto,
+    @GetMapping("/missions/{userId}")
+    public ApiResponse<CursorResponse<MissionResDTO.UserMissionResponse>> getMissions(
+            @Valid @PathVariable Long userId,
             @RequestParam Status status,
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "5") Integer size
@@ -39,16 +44,35 @@ public class MissionController {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(
                 code,
-                missionService.getMission(dto.user_id(), status, cursor, size)
+                missionService.getMission(userId, status, cursor, size)
         );
     }
 
     // 미션 성공 COMPLETED 처리
-    @PostMapping("v1/completed")
-    public ApiResponse<MissionResDTO.CompletedMissionStatus> patchCompleted(
-            @RequestBody MissionReqDTO.CompletedMissionStatus dto
+    @PatchMapping("/completed")
+    public ApiResponse<MissionResDTO.MissionStatusUpdateResponse> patchCompleted(
+            @Valid @RequestBody MissionReqDTO.MissionStatusUpdateRequest dto
     ) {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(code, missionService.patchCompleted(dto));
+    }
+
+    // w7 : 진행 중 미션 조회 (오프셋)
+    @GetMapping("/missions/in-progress/{userId}")
+    public ApiResponse<PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
+            @PathVariable Long userId,
+            @RequestParam Integer pageSize,
+            @RequestParam Integer pageNumber,
+            @RequestParam(required = false) String sort
+    ) {
+        return ApiResponse.onSuccess(
+                GeneralSuccessCode.OK,
+                missionService.getMyInProgressMissions(
+                        userId,
+                        pageSize,
+                        pageNumber,
+                        sort
+                )
+        );
     }
 }

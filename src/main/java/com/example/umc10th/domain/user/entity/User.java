@@ -39,11 +39,11 @@ public class User extends BaseEntity {
     private LocalDate birth;
 
     // 기본 주소
-    @Column(name = "addressLine1", nullable = false)
+    @Column(name = "address_line1", nullable = false)
     private String addressLine1;
 
     // 상세 주소
-    @Column(name = "addressLine2", nullable = false)
+    @Column(name = "address_line2", nullable = false)
     private String addressLine2;
 
     // 누적 포인트
@@ -53,7 +53,7 @@ public class User extends BaseEntity {
     @Column(name = "social_uid")
     private String socialUID;
 
-    @Column(name = "socialType")
+    @Column(name = "social_type")
     private SocialType socialType;
 
     // 사용자 닉네임
