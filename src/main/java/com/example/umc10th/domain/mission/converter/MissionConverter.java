@@ -24,11 +24,30 @@ public class MissionConverter {
 
         return new MissionResDTO.UserMissionResponse(
                 userMission.getId(),
-                mission.getId(),
+//                mission.getId(),
                 store.getName(),
                 mission.getConditionAmount(),
                 mission.getRewardPoint(),
                 userMission.getStatus(),
+                dday
+        );
+    }
+
+    // w7 피드백 (dto projection)
+    public static MissionResDTO.UserMissionResponse toUserMissionResponse(
+            MissionResDTO.UserMissionQueryDTO userMission
+    ) {
+        int dday = (int) ChronoUnit.DAYS.between(
+                LocalDate.now(),
+                userMission.endDate()
+        );
+
+        return new MissionResDTO.UserMissionResponse(
+                userMission.userMissionId(),
+                userMission.storeName(),
+                userMission.conditionAmount(),
+                userMission.rewardPoint(),
+                userMission.status(),
                 dday
         );
     }

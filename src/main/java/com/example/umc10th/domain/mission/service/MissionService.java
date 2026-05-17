@@ -4,7 +4,6 @@ import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.MissionReqDTO;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
-import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
 import com.example.umc10th.domain.mission.repository.UserMissionRepository;
@@ -114,7 +113,7 @@ public class MissionService {
 
         Pageable pageable = PageRequest.of(0, size + 1);
 
-        List<UserMission> userMissionList =
+        List<MissionResDTO.UserMissionQueryDTO> userMissionList =
                 userMissionRepository.findMyMissionsByStatusWithCursor(
                         user.getId(),
                         status,
@@ -156,7 +155,8 @@ public class MissionService {
 
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, sortInfo);
 
-        Page<UserMission> page =
+//      Page<UserMission> page =
+        Page<MissionResDTO.UserMissionQueryDTO> page =
                 userMissionRepository.findAllByUserIdAndStatusWithPaging(
                         userId,
                         Status.IN_PROGRESS,

@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.mission.repository;
 
+import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.Status;
 import org.springframework.data.domain.Page;
@@ -15,16 +16,23 @@ import java.util.List;
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
     @Query("""
-        SELECT mc
-        FROM UserMission mc
-        JOIN FETCH mc.mission m
-        JOIN FETCH m.store s
-        WHERE mc.user.id = :userId
-          AND mc.status = :status
-          AND (:cursor IS NULL OR mc.id < :cursor)
-        ORDER BY mc.id DESC
-    """)
-    List<UserMission> findMyMissionsByStatusWithCursor(
+    SELECT new com.example.umc10th.domain.mission.dto.MissionResDTO.UserMissionQueryDTO(
+        mc.id,
+        s.name,
+        m.conditionAmount,
+        m.rewardPoint,
+        mc.status,
+        m.endDate
+    )
+    FROM UserMission mc
+    JOIN mc.mission m
+    JOIN m.store s
+    WHERE mc.user.id = :userId
+      AND mc.status = :status
+      AND (:cursor IS NULL OR mc.id < :cursor)
+    ORDER BY mc.id DESC
+""")
+    List<MissionResDTO.UserMissionQueryDTO> findMyMissionsByStatusWithCursor(
             @Param("userId") Long userId,
             @Param("status") Status status,
             @Param("cursor") Long cursor,
@@ -32,14 +40,21 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
     );
 
     @Query("""
-    SELECT um
+    SELECT new com.example.umc10th.domain.mission.dto.MissionResDTO.UserMissionQueryDTO(
+        um.id,
+        s.name,
+        m.conditionAmount,
+        m.rewardPoint,
+        um.status,
+        m.endDate
+    )
     FROM UserMission um
-    JOIN FETCH um.mission m
-    JOIN FETCH m.store s
+    JOIN um.mission m
+    JOIN m.store s
     WHERE um.user.id = :userId
       AND um.status = :status
 """)
-    Page<UserMission> findAllByUserIdAndStatusWithPaging(
+    Page<MissionResDTO.UserMissionQueryDTO> findAllByUserIdAndStatusWithPaging(
             @Param("userId") Long userId,
             @Param("status") Status status,
             Pageable pageable
