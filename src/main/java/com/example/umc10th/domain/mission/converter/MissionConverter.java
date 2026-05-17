@@ -5,11 +5,9 @@ import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
-import com.example.umc10th.global.dto.CursorResponse;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 public class MissionConverter {
 

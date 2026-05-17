@@ -2,7 +2,6 @@ package com.example.umc10th.domain.mission.dto;
 
 import com.example.umc10th.domain.mission.enums.Status;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
