@@ -34,7 +34,8 @@ public class MissionService {
 
     // 홈 화면 조회
     public MissionResDTO.MissionHomeResponse getHome(
-            MissionReqDTO.MissionHomeRequest dto,
+            Long userId,
+            Long regionId,
             Long cursor,
             Integer size
     ) {
@@ -42,8 +43,8 @@ public class MissionService {
 
         List<Mission> missionList =
                 missionRepository.findHomeMissionsByRegionWithCursor(
-                        dto.userId(),
-                        dto.regionId(),
+                        userId,
+                        regionId,
                         cursor,
                         pageable
                 );
@@ -83,12 +84,12 @@ public class MissionService {
                 : missionList.get(0).getStore().getRegion().getName();
 
         Integer totalMissionCount =
-                missionRepository.countTotalMissionsByRegion(dto.regionId());
+                missionRepository.countTotalMissionsByRegion(regionId);
 
         Integer completedMissionCount =
                 missionRepository.countCompletedMissionsByUserAndRegion(
-                        dto.userId(),
-                        dto.regionId()
+                        userId,
+                        regionId
                 );
 
         return new MissionResDTO.MissionHomeResponse(
