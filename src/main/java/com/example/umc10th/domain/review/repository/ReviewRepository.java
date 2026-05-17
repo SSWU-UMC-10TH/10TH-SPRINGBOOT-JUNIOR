@@ -15,9 +15,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("""
         SELECT r
         FROM Review r
-        JOIN FETCH r.user u
         JOIN FETCH r.store s
-        WHERE u.id = :userId
+        WHERE r.user.id = :userId
           AND (:cursor IS NULL OR r.id < :cursor)
         ORDER BY r.id DESC
     """)
@@ -31,9 +30,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         @Query("""
         SELECT r
         FROM Review r
-        JOIN FETCH r.user u
         JOIN FETCH r.store s
-        WHERE u.id = :userId
+        WHERE r.user.id = :userId
           AND (
               :ratingCursor IS NULL
               OR r.rating < :ratingCursor
