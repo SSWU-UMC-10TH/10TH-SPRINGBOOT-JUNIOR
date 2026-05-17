@@ -31,11 +31,11 @@ public class MissionResDTO {
 
 
     // 오프셋 페이징 응답
-    public record PageResponse<T>(
-            List<T> data,
-            Integer pageNumber,
-            Integer pageSize
-    ) {}
+//    public record PageResponse<T>(
+//            List<T> data,
+//            Integer pageNumber,
+//            Integer pageSize
+//    ) {}
 
     // 홈 조회 응답
     public record MissionHomeResponse(
@@ -48,11 +48,11 @@ public class MissionResDTO {
     ) {}
 
     // 사용자별 진행중/진행 완료 미션 조회 응답
-    public record UserMissionListResponse(
-            List<UserMissionResponse> missions,
-            Long cursor,
-            Boolean hasNext
-    ) {}
+//    public record UserMissionListResponse(
+//            List<UserMissionResponse> missions,
+//            Long cursor,
+//            Boolean hasNext
+//    ) {}
 
 
     // 미션 상태 변경 응답

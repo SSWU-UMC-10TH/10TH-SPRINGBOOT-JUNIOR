@@ -13,7 +13,10 @@ import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.exceptions.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.exception.ProjectException;
+import com.example.umc10th.global.dto.CursorResponse;
+import com.example.umc10th.global.dto.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -105,7 +108,7 @@ public class MissionService {
     }
 
     // 사용자별 진행중/진행 완료 미션 조회
-    public MissionResDTO.UserMissionListResponse getMission(
+    public CursorResponse<MissionResDTO.UserMissionResponse> getMission(
             Long userId,
             Status status,
             Long cursor,
@@ -139,11 +142,14 @@ public class MissionService {
                 ? null
                 : missions.get(missions.size() - 1).userMissionId();
 
-        return MissionConverter.toUserMissionListResponse(missions, nextCursor, hasNext);
-    }
+        return new CursorResponse<>(
+                missions,
+                nextCursor,
+                hasNext
+        );    }
 
     // w7 : 진행 중 미션 조회 (오프셋)
-    public MissionResDTO.PageResponse<MissionResDTO.UserMissionResponse> getMyInProgressMissions(
+    public PageResponse<MissionResDTO.UserMissionResponse> getMyInProgressMissions(
             Long userId,
             Integer pageSize,
             Integer pageNumber,
@@ -171,7 +177,7 @@ public class MissionService {
                         .map(MissionConverter::toUserMissionResponseFromQuery)
                         .toList();
 
-        return new MissionResDTO.PageResponse<>(
+        return new PageResponse<>(
                 missions,
                 page.getNumber(),
                 page.getSize()

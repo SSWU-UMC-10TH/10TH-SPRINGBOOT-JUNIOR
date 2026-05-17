@@ -8,6 +8,8 @@ import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.example.umc10th.global.apiPayload.code.GeneralSuccessCode;
+import com.example.umc10th.global.dto.CursorResponse;
+import com.example.umc10th.global.dto.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class MissionController {
     private final MissionService missionService;
 
     // 홈 화면 조회
-    @GetMapping("/home")
+    @GetMapping("/home/{userId}")
     public ApiResponse<MissionResDTO.MissionHomeResponse> getHome(
             @Valid @PathVariable Long userId,
             @RequestParam Long regionId,
@@ -32,8 +34,8 @@ public class MissionController {
     }
 
     // 사용자별 진행중/진행 완료 미션 조회
-    @GetMapping("/missions")
-    public ApiResponse<MissionResDTO.UserMissionListResponse> getMissions(
+    @GetMapping("/missions/{userId}")
+    public ApiResponse<CursorResponse<MissionResDTO.UserMissionResponse>> getMissions(
             @Valid @PathVariable Long userId,
             @RequestParam Status status,
             @RequestParam(required = false) Long cursor,
@@ -56,8 +58,8 @@ public class MissionController {
     }
 
     // w7 : 진행 중 미션 조회 (오프셋)
-    @GetMapping("/missions/in-progress")
-    public ApiResponse<MissionResDTO.PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
+    @GetMapping("/missions/in-progress/{userId}")
+    public ApiResponse<PageResponse<MissionResDTO.UserMissionResponse>> getMyInProgressMissions(
             @PathVariable Long userId,
             @RequestParam Integer pageSize,
             @RequestParam Integer pageNumber,

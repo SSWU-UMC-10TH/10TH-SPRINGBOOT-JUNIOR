@@ -5,6 +5,7 @@ import com.example.umc10th.domain.mission.dto.UserMissionQueryDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.global.dto.CursorResponse;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -53,15 +54,14 @@ public class MissionConverter {
         );
     }
 
-    public static MissionResDTO.UserMissionListResponse toUserMissionListResponse(
-            List<MissionResDTO.UserMissionResponse> missions,
-            Long cursor,
-            Boolean hasNext
-    ) {
-        return new MissionResDTO.UserMissionListResponse(
-                missions,
-                cursor,
-                hasNext
-        );
-    }
+//    public static MissionResDTO.UserMissionListResponse toUserMissionListResponse(
+//            List<MissionResDTO.UserMissionResponse> missions,
+//            Long cursor,
+//            Boolean hasNext
+//    ) {
+//        return new CursorResponse<>(
+//                missions,
+//                nextCursor,
+//                hasNext
+//        );    }
 }
