@@ -18,21 +18,29 @@ public class MissionChoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_choice_id")
     private Long missionChoiceId;
 
-    @Column(nullable = false)
+    @Column(name = "started_at", nullable = false)
     private LocalDateTime startedAt;
 
+    @Column(name = "success_at")
     private LocalDateTime successAt;
 
-    @Column(nullable = false)
-    private Boolean success;
+    @Column(name = "success", nullable = false)
+    private Boolean success = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id", nullable = false)
-    private Mission mission;
-
+    /*
+     * FK: user_id
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    /*
+     * FK: mission_id
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_id", nullable = false)
+    private Mission mission;
 }

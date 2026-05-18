@@ -1,11 +1,13 @@
 package com.example.umc10th.domain.user.entity;
 
 import com.example.umc10th.domain.user.enums.Gender;
-import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -13,7 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,16 +41,20 @@ public class User extends BaseEntity {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "profile_url")
-    private String profileUrl;
-
     @Column(name = "point", nullable = false)
     private Long point;
-
-    public void updatePoint(Long point) {
-        this.point = point;
-    }
 }

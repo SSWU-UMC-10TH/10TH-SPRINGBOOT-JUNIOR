@@ -4,6 +4,8 @@ import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -13,24 +15,36 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "mission")
-public class Mission extends BaseEntity {
+public class Mission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_id")
     private Long missionId;
 
-    @Column(nullable = false, length = 100)
-    private String title;
+    @Column(name = "mission", nullable = false, length = 100)
+    private String mission;
 
-    @Column(nullable = false)
+    @Column(name = "point", nullable = false)
     private Integer point;
 
-    @Column(nullable = false)
-    private Integer targetAmount;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
-    @Column(nullable = false)
-    private Boolean isActive;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    /*
+     * FK: store_id
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;

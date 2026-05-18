@@ -45,7 +45,6 @@ public class UserService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .phoneNumber(request.phoneNumber())
-                .profileUrl(request.profileUrl())
                 .point(0L)
                 .build();
 
