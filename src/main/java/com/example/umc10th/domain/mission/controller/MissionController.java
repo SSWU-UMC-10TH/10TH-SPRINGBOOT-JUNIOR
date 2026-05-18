@@ -1,13 +1,13 @@
 package com.example.umc10th.domain.mission.controller;
 
-import com.example.umc10th.domain.mission.dto.CompleteMissionResDTO;
-import com.example.umc10th.domain.mission.dto.HomeResDTO;
-import com.example.umc10th.domain.mission.dto.MissionResDTO;
-import com.example.umc10th.domain.mission.dto.MyMissionDTO;
+import com.example.umc10th.domain.mission.dto.*;
 import com.example.umc10th.domain.mission.enums.MissionStatus;
 import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.dto.PageResponse;   // ✅ 추가
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,12 +42,12 @@ public class MissionController {
         );
     }
 
-    @GetMapping("/my-missions")
-    public ResponseEntity<ApiResponse<PageResponse<MyMissionDTO.Response>>> getMyMissions(
-            @RequestParam Long memberId,
-            @RequestParam(required = false) MissionStatus status,
-            @RequestParam int page,
-            @RequestParam int size
+    @GetMapping("/members/{memberId}/my-missions")
+    public ResponseEntity<ApiResponse<PageResponse<MyMissionResDTO.Response>>> getMyMissions(
+            @PathVariable Long memberId,
+            @RequestParam(defaultValue = "ALL") MissionStatus status,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(50) int size
     ) {
         return ResponseEntity.ok(
                 ApiResponse.onSuccess(
@@ -55,6 +55,7 @@ public class MissionController {
                 )
         );
     }
+
 
     @PostMapping("/my-missions/{myMissionId}/complete")
     public ResponseEntity<ApiResponse<CompleteMissionResDTO>> completeMission(
