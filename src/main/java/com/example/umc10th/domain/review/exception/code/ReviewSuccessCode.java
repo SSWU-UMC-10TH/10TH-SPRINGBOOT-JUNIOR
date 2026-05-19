@@ -11,25 +11,25 @@ public enum ReviewSuccessCode implements BaseSuccessCode {
 
     CREATE_REVIEW_SUCCESS(
             HttpStatus.OK,
-            "REVIEW200_1",
+            "REVIEW201_1",
             "리뷰 작성에 성공했습니다."
     ),
 
     GET_STORE_REVIEW_SUCCESS(
             HttpStatus.OK,
-            "REVIEW200_2",
+            "REVIEW200_1",
             "식당 리뷰 목록 조회에 성공했습니다."
     ),
 
     GET_MY_REVIEWS_BY_ID_SUCCESS(
             HttpStatus.OK,
-            "REVIEW200_3",
+            "REVIEW200_2",
             "내 리뷰 최신순 조회에 성공했습니다."
     ),
 
     GET_MY_REVIEWS_BY_RATING_SUCCESS(
             HttpStatus.OK,
-            "REVIEW200_4",
+            "REVIEW200_3",
             "내 리뷰 평점순 조회에 성공했습니다."
     );
 

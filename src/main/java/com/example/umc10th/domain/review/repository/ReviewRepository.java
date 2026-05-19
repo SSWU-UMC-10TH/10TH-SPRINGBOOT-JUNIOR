@@ -15,7 +15,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             select r
             from Review r
             where r.store.storeId = :storeId
-            and r.deletedAt is null
             and (:cursorId is null or r.reviewId < :cursorId)
             order by r.reviewId desc
             """)
@@ -30,7 +29,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             select r
             from Review r
             where r.user.userId = :userId
-            and r.deletedAt is null
             and (:cursorId is null or r.reviewId < :cursorId)
             order by r.reviewId desc
             """)
@@ -45,7 +43,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             select r
             from Review r
             where r.user.userId = :userId
-            and r.deletedAt is null
             and (
                 :cursorRating is null
                 or r.rating < :cursorRating

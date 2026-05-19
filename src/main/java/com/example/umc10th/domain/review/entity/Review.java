@@ -5,10 +5,8 @@ import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
@@ -16,6 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name = "review")
+@SQLDelete(sql = "UPDATE review SET deleted_at = NOW() WHERE review_id = ?")
+@SQLRestriction("deleted_at IS NULL")
 public class Review extends BaseEntity {
 
     @Id

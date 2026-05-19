@@ -17,13 +17,13 @@ public enum MissionErrorCode implements BaseErrorCode {
 
     MISSION_ALREADY_CHALLENGED(
             HttpStatus.BAD_REQUEST,
-            "MISSION400_1",
+            "MISSION409_1",
             "이미 도전 중인 미션입니다."
     ),
 
     MISSION_NOT_IN_PROGRESS(
             HttpStatus.BAD_REQUEST,
-            "MISSION400_2",
+            "MISSION400_1",
             "진행 중인 미션이 아닙니다."
     );
 
