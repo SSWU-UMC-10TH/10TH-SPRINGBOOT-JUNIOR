@@ -1,7 +1,6 @@
 package com.example.umc10th.domain.mission.entity;
 
 import com.example.umc10th.domain.store.entity.Store;
-import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +23,9 @@ public class Mission {
 
     @Column(name = "mission", nullable = false, length = 100)
     private String mission;
+
+    @Column(name = "target_amount")
+    private Integer targetAmount;
 
     @Column(name = "point", nullable = false)
     private Integer point;

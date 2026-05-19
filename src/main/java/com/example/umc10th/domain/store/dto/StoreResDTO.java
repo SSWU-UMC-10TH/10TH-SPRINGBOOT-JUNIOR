@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 
 public class StoreResDTO {
 
-    @Builder
     public record GetStoreInfo(
             Long storeId,
             String storeName,

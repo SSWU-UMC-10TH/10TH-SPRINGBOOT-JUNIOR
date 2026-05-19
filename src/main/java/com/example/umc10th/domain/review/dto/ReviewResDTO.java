@@ -65,7 +65,7 @@ public class ReviewResDTO {
 
     // 내가 쓴 리뷰 조회 - 평점순(cursor)
     public record GetMyReviewsByRating(
-            List<MyReview> reviewList,
+            List<GetMyReview> reviewList,
             Integer listSize,
             Boolean hasNext,
             Long nextCursorId,

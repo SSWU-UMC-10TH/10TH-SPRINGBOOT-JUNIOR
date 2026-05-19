@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.store.entity;
 
+import com.example.umc10th.domain.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,4 +34,11 @@ public class Store {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    /*
+     * FK: address_id
+     */
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
 }

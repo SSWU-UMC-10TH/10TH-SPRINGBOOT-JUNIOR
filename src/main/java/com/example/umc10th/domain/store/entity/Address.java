@@ -37,18 +37,4 @@ public class Address {
 
     @Column(name = "address_line", length = 100)
     private String addressLine;
-
-    /*
-     * FK: user_id
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    /*
-     * FK: store_id
-     */
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
-    private Store store;
 }
