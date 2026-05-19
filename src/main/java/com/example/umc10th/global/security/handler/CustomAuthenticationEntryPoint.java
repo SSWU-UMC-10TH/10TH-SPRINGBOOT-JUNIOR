@@ -20,12 +20,12 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             AuthenticationException authException
     ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        BaseErrorCode code = GeneralErrorCode.UNAUTHORIZED;
+        BaseErrorCode errorCode = GeneralErrorCode.UNAUTHORIZED;
 
+        response.setStatus(errorCode.getStatus().value());
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(code.getStatus().value());
 
-        ApiResponse<Void> errorResponse = ApiResponse.onFailure(code, null);
+        ApiResponse<Void> errorResponse = ApiResponse.onFailure(errorCode, null);
         objectMapper.writeValue(response.getOutputStream(), errorResponse);
     }
 }

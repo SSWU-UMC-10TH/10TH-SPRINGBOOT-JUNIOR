@@ -20,12 +20,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             AccessDeniedException accessDeniedException
     ) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
-        BaseErrorCode code = GeneralErrorCode.FORBIDDEN;
+        BaseErrorCode errorCode = GeneralErrorCode.FORBIDDEN;
 
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(code.getStatus().value());
+        response.setStatus(errorCode.getStatus().value());
 
-        ApiResponse<Void> errorResponse = ApiResponse.onFailure(code, null);
+        ApiResponse<Void> errorResponse = ApiResponse.onFailure(errorCode, null);
         objectMapper.writeValue(response.getOutputStream(), errorResponse);
     }
 }
