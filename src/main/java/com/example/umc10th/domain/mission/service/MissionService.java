@@ -14,8 +14,8 @@ import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,26 +26,67 @@ import java.time.LocalDateTime;
 @Transactional(readOnly = true)
 public class MissionService {
 
-    private final MissionChoiceRepository missionChoiceRepository;
     private final MissionRepository missionRepository;
+    private final MissionChoiceRepository missionChoiceRepository;
     private final UserRepository userRepository;
 
-    public MissionResDTO.MissionPreviewList getMyMissions(MissionReqDTO.GetMyMissions request) {
+    // 식당에서 진행하는 미션 목록 조회(cursor)
+    public MissionResDTO.GetStoreMissions getStoreMissions(
+            MissionReqDTO.GetStoreMissions request
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, request.size());
 
-        PageRequest pageRequest = PageRequest.of(
-                request.page(),
-                request.size()
+        Slice<Mission> missionSlice = missionRepository.findStoreMissions(
+                request.storeId(),
+                request.cursorId(),
+                pageRequest
         );
 
-        Page<MissionChoice> missionChoicePage =
-                missionChoiceRepository.findByUserUserIdAndSuccessFalseOrderByStartedAtDesc(
-                        request.userId(),
-                        pageRequest
-                );
-
-        return MissionConverter.toMissionPreviewList(missionChoicePage);
+        return MissionConverter.toGetStoreMissions(missionSlice);
     }
 
+    // 식당에서 진행하는 미션 1개 상세 조회
+    public MissionResDTO.GetStoreMission getStoreMission(
+            MissionReqDTO.GetStoreMission request
+    ) {
+        Mission mission = missionRepository.findStoreMission(
+                        request.storeId(),
+                        request.missionId()
+                )
+                .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
+
+        return MissionConverter.toGetStoreMission(mission);
+    }
+
+    // 사용자가 진행 중인 미션 목록 조회(cursor)
+    public MissionResDTO.GetMyMissions getMyMissions(
+            MissionReqDTO.GetMyMissions request
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, request.size());
+
+        Slice<MissionChoice> missionChoiceSlice = missionChoiceRepository.findMyMissions(
+                request.userId(),
+                request.cursorId(),
+                pageRequest
+        );
+
+        return MissionConverter.toGetMyMissions(missionChoiceSlice);
+    }
+
+    // 사용자가 진행 중인 미션 1개 상세 조회
+    public MissionResDTO.GetMyMission getMyMission(
+            MissionReqDTO.GetMyMission request
+    ) {
+        MissionChoice missionChoice = missionChoiceRepository.findMyMission(
+                        request.userId(),
+                        request.missionChoiceId()
+                )
+                .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
+
+        return MissionConverter.toGetMyMission(missionChoice);
+    }
+
+    // 미션 도전 요청
     @Transactional
     public MissionResDTO.ChallengeMission challengeMission(
             MissionReqDTO.ChallengeMission request

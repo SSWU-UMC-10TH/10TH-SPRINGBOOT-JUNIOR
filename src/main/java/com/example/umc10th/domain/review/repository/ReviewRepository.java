@@ -1,7 +1,6 @@
 package com.example.umc10th.domain.review.repository;
 
 import com.example.umc10th.domain.review.entity.Review;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -11,20 +10,22 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @EntityGraph(attributePaths = {"user"})
+    @EntityGraph(attributePaths = {"user", "store"})
     @Query("""
             select r
             from Review r
             where r.store.storeId = :storeId
             and r.deletedAt is null
-            order by r.createdAt desc
+            and (:cursorId is null or r.reviewId < :cursorId)
+            order by r.reviewId desc
             """)
-    Page<Review> findStoreReviews(
+    Slice<Review> findStoreReviews(
             @Param("storeId") Long storeId,
+            @Param("cursorId") Long cursorId,
             Pageable pageable
     );
 
-    @EntityGraph(attributePaths = {"store"})
+    @EntityGraph(attributePaths = {"user", "store"})
     @Query("""
             select r
             from Review r
@@ -33,13 +34,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             and (:cursorId is null or r.reviewId < :cursorId)
             order by r.reviewId desc
             """)
-    Slice<Review> findMyReviewsByIdCursor(
+    Slice<Review> findMyReviewsById(
             @Param("userId") Long userId,
             @Param("cursorId") Long cursorId,
             Pageable pageable
     );
 
-    @EntityGraph(attributePaths = {"store"})
+    @EntityGraph(attributePaths = {"user", "store"})
     @Query("""
             select r
             from Review r
@@ -52,7 +53,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             )
             order by r.rating desc, r.reviewId desc
             """)
-    Slice<Review> findMyReviewsByRatingCursor(
+    Slice<Review> findMyReviewsByRating(
             @Param("userId") Long userId,
             @Param("cursorRating") Double cursorRating,
             @Param("cursorId") Long cursorId,

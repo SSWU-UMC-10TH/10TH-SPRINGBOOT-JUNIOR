@@ -16,6 +16,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    // 리뷰 작성
     @PostMapping
     public ApiResponse<ReviewResDTO.CreateReview> createReview(
             @Valid @RequestBody ReviewReqDTO.CreateReview request
@@ -26,8 +27,9 @@ public class ReviewController {
         );
     }
 
+    // 식당 리뷰 목록 조회(cursor)
     @PostMapping("/store")
-    public ApiResponse<ReviewResDTO.ReviewPreviewList> getStoreReviews(
+    public ApiResponse<ReviewResDTO.GetStoreReviews> getStoreReviews(
             @Valid @RequestBody ReviewReqDTO.GetStoreReviews request
     ) {
         return ApiResponse.onSuccess(
@@ -36,8 +38,9 @@ public class ReviewController {
         );
     }
 
+    // 내가 쓴 리뷰 조회 - 최신순(cursor)
     @PostMapping("/my/id")
-    public ApiResponse<ReviewResDTO.CursorPagination> getMyReviewsById(
+    public ApiResponse<ReviewResDTO.GetMyReviewsById> getMyReviewsById(
             @Valid @RequestBody ReviewReqDTO.GetMyReviewsById request
     ) {
         return ApiResponse.onSuccess(
@@ -46,8 +49,9 @@ public class ReviewController {
         );
     }
 
+    // 내가 쓴 리뷰 조회 - 평점순(cursor)
     @PostMapping("/my/rating")
-    public ApiResponse<ReviewResDTO.CursorPagination> getMyReviewsByRating(
+    public ApiResponse<ReviewResDTO.GetMyReviewsByRating> getMyReviewsByRating(
             @Valid @RequestBody ReviewReqDTO.GetMyReviewsByRating request
     ) {
         return ApiResponse.onSuccess(

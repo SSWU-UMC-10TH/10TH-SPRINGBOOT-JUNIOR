@@ -20,13 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResDTO.GetMyPage getMyPage(UserReqDTO.GetMyPage request) {
-        User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
-
-        return UserConverter.toGetMyPage(user);
-    }
-
+    // 회원가입
     @Transactional
     public UserResDTO.SignUp signUp(UserReqDTO.SignUp request) {
         if (userRepository.existsByEmail(request.email())) {
@@ -52,5 +46,13 @@ public class UserService {
         userRepository.save(user);
 
         return UserConverter.toSignUp(user);
+    }
+
+    // 마이페이지 조회
+    public UserResDTO.GetMyPage getMyPage(UserReqDTO.GetMyPage request) {
+        User user = userRepository.findById(request.userId())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        return UserConverter.toGetMyPage(user);
     }
 }

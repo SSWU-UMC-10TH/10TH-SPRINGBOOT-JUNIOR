@@ -16,6 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
+    // 회원가입
     @PostMapping("/sign-up")
     public ApiResponse<UserResDTO.SignUp> signUp(
             @Valid @RequestBody UserReqDTO.SignUp request
@@ -26,6 +27,7 @@ public class UserController {
         );
     }
 
+    // 마이페이지
     @PostMapping("/me")
     public ApiResponse<UserResDTO.GetMyPage> getMyPage(
             @Valid @RequestBody UserReqDTO.GetMyPage request
