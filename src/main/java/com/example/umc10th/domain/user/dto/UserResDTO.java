@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class UserResDTO {
 
+    // 마이페이지
     public record GetMyPage(
             String nickname,
             String profileUrl,
@@ -13,6 +14,7 @@ public class UserResDTO {
     ) {
     }
 
+    // 회원가입
     public record SignUp(
             Long userId,
             String email,

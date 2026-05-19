@@ -7,12 +7,14 @@ import java.time.LocalDate;
 
 public class UserReqDTO {
 
+    // 마이페이지 요청 시 NullPointerException 방지
     public record GetMyPage(
             @NotNull(message = "사용자 ID는 필수입니다.")
             Long userId
     ) {
     }
 
+    // 회원가입
     public record SignUp(
 
             @NotBlank(message = "이름은 필수입니다.")

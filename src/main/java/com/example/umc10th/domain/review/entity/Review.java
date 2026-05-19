@@ -2,7 +2,6 @@ package com.example.umc10th.domain.review.entity;
 
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.domain.user.entity.User;
-import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

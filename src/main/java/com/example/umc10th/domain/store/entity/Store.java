@@ -1,6 +1,5 @@
 package com.example.umc10th.domain.store.entity;
 
-import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
