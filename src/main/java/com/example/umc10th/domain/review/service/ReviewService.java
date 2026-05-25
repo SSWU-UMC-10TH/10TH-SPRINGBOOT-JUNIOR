@@ -14,7 +14,6 @@ import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -29,8 +28,11 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
 
+    // 리뷰 작성
     @Transactional
-    public ReviewResDTO.CreateReview createReview(ReviewReqDTO.CreateReview request) {
+    public ReviewResDTO.CreateReview createReview(
+            ReviewReqDTO.CreateReview request
+    ) {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -40,7 +42,8 @@ public class ReviewService {
         Review review = Review.builder()
                 .user(user)
                 .store(store)
-                .content(request.content())
+                .reviewTitle(request.review_title())
+                .reviewComment(request.review_comment())
                 .rating(request.rating())
                 .build();
 
@@ -49,43 +52,49 @@ public class ReviewService {
         return ReviewConverter.toCreateReview(review);
     }
 
-    public ReviewResDTO.ReviewPreviewList getStoreReviews(ReviewReqDTO.GetStoreReviews request) {
-        PageRequest pageRequest = PageRequest.of(request.page(), 10);
+    // 식당 리뷰 목록 조회(cursor)
+    public ReviewResDTO.GetStoreReviews getStoreReviews(
+            ReviewReqDTO.GetStoreReviews request
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, request.size());
 
-        Page<Review> reviewPage = reviewRepository.findStoreReviews(
+        Slice<Review> reviewSlice = reviewRepository.findStoreReviews(
                 request.storeId(),
+                request.cursorId(),
                 pageRequest
         );
 
-        return ReviewConverter.toReviewPreviewList(reviewPage);
+        return ReviewConverter.toGetStoreReviews(reviewSlice);
     }
 
-    public ReviewResDTO.CursorPagination getMyReviewsById(
+    // 사용자가 쓴 리뷰 조회 - 최신순(cursor)
+    public ReviewResDTO.GetMyReviewsById getMyReviewsById(
             ReviewReqDTO.GetMyReviewsById request
     ) {
         PageRequest pageRequest = PageRequest.of(0, request.size());
 
-        Slice<Review> reviewSlice = reviewRepository.findMyReviewsByIdCursor(
+        Slice<Review> reviewSlice = reviewRepository.findMyReviewsById(
                 request.userId(),
                 request.cursorId(),
                 pageRequest
         );
 
-        return ReviewConverter.toCursorPagination(reviewSlice);
+        return ReviewConverter.toGetMyReviewsById(reviewSlice);
     }
 
-    public ReviewResDTO.CursorPagination getMyReviewsByRating(
+    // 사용자가 쓴 리뷰 조회 - 평점순(cursor)
+    public ReviewResDTO.GetMyReviewsByRating getMyReviewsByRating(
             ReviewReqDTO.GetMyReviewsByRating request
     ) {
         PageRequest pageRequest = PageRequest.of(0, request.size());
 
-        Slice<Review> reviewSlice = reviewRepository.findMyReviewsByRatingCursor(
+        Slice<Review> reviewSlice = reviewRepository.findMyReviewsByRating(
                 request.userId(),
                 request.cursorRating(),
                 request.cursorId(),
                 pageRequest
         );
 
-        return ReviewConverter.toCursorPagination(reviewSlice);
+        return ReviewConverter.toGetMyReviewsByRating(reviewSlice);
     }
 }

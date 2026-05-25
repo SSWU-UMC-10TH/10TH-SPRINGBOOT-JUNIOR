@@ -4,8 +4,11 @@ import com.example.umc10th.domain.user.enums.Gender;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -42,10 +45,9 @@ public class User extends BaseEntity {
     @Column(name = "profile_url")
     private String profileUrl;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Column(name = "point", nullable = false)
     private Long point;
-
-    public void updatePoint(Long point) {
-        this.point = point;
-    }
 }

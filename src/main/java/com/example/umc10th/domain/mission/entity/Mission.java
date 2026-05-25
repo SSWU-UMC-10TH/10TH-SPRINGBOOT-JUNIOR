@@ -4,6 +4,8 @@ import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -17,20 +19,24 @@ public class Mission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "mission_id")
     private Long missionId;
 
-    @Column(nullable = false, length = 100)
-    private String title;
+    @Column(name = "mission", nullable = false, length = 100)
+    private String mission;
 
-    @Column(nullable = false)
-    private Integer point;
-
-    @Column(nullable = false)
+    @Column(name = "target_amount")
     private Integer targetAmount;
 
-    @Column(nullable = false)
-    private Boolean isActive;
+    @Column(name = "point", nullable = false)
+    private Integer point;
 
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+    /*
+     * FK: store_id
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;

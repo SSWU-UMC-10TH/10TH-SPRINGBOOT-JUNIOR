@@ -18,9 +18,15 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
-    public StoreResDTO.GetStoreInfo getStoreInfo(StoreReqDTO.GetStoreInfo request) {
+    // 식당 정보 조회
+    public StoreResDTO.GetStoreInfo getStoreInfo(
+            StoreReqDTO.GetStoreInfo request
+    ) {
+
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
+                .orElseThrow(() ->
+                        new StoreException(StoreErrorCode.STORE_NOT_FOUND)
+                );
 
         return StoreConverter.toGetStoreInfo(store);
     }

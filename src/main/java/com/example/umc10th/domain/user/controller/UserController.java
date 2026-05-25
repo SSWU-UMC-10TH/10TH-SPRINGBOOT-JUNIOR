@@ -5,12 +5,9 @@ import com.example.umc10th.domain.user.dto.UserResDTO;
 import com.example.umc10th.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
-import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,12 +16,25 @@ public class UserController {
 
     private final UserService userService;
 
+    // 회원가입
+    @PostMapping("/sign-up")
+    public ApiResponse<UserResDTO.SignUp> signUp(
+            @Valid @RequestBody UserReqDTO.SignUp request
+    ) {
+        return ApiResponse.onSuccess(
+                UserSuccessCode.SIGN_UP_SUCCESS,
+                userService.signUp(request)
+        );
+    }
+
     // 마이페이지
     @PostMapping("/me")
     public ApiResponse<UserResDTO.GetMyPage> getMyPage(
-            @RequestBody UserReqDTO.GetMyPage dto
-            ){
-        BaseSuccessCode code = UserSuccessCode.OK;
-        return ApiResponse.onSuccess(code, userService.getMyPage(dto));
+            @Valid @RequestBody UserReqDTO.GetMyPage request
+    ) {
+        return ApiResponse.onSuccess(
+                UserSuccessCode.GET_MY_PAGE_SUCCESS,
+                userService.getMyPage(request)
+        );
     }
 }
