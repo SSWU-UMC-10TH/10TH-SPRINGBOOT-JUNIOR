@@ -8,6 +8,7 @@ import com.example.umc10th.domain.member.exception.code.MemberErrorCode;
 import com.example.umc10th.domain.member.repository.MemberRepository;
 import com.example.umc10th.global.apiPayload.exception.ProjectException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public MemberResDTO createMember(MemberReqDTO.SignUpRequest dto) {
 
@@ -25,12 +27,14 @@ public class MemberService {
         Member member = Member.builder()
                 .name(dto.name())
                 .email(dto.email())
+                .password(passwordEncoder.encode(dto.password())) // BCrypt 암호화
                 .phoneNumber(dto.phoneNumber())
                 .point(0)
                 .gender(dto.gender())
                 .birth(dto.birth())
                 .address(dto.address())
                 .detailAddress(dto.detailAddress())
+                .socialUid(dto.socialUid())
                 .socialType(dto.socialType())
                 .build();
 
@@ -41,6 +45,17 @@ public class MemberService {
     public MemberResDTO getMemberInfo(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new ProjectException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        return MemberConverter.toDTO(member);
+    }
+
+    public MemberResDTO login(MemberReqDTO.LoginRequest dto) {
+        Member member = memberRepository.findByEmail(dto.email())
+                .orElseThrow(() -> new ProjectException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(dto.password(), member.getPassword())) {
+            throw new ProjectException(MemberErrorCode.INVALID_PASSWORD);
+        }
 
         return MemberConverter.toDTO(member);
     }
