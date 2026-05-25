@@ -17,10 +17,14 @@ public class MissionController {
     private final MissionService missionService;
 
     // 식당에서 진행 중인 미션 목록 조회(cursor)
-    @PostMapping("/store")
+    @GetMapping("/store")
     public ApiResponse<MissionResDTO.GetStoreMissions> getStoreMissions(
-            @Valid @RequestBody MissionReqDTO.GetStoreMissions request
+            @RequestParam Long storeId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam Integer size
     ) {
+        MissionReqDTO.GetStoreMissions request =
+                new MissionReqDTO.GetStoreMissions(storeId, cursorId, size);
 
         return ApiResponse.onSuccess(
                 MissionSuccessCode.GET_STORE_MISSIONS_SUCCESS,
@@ -29,10 +33,13 @@ public class MissionController {
     }
 
     // 식당에서 진행 중인 미션 1개 상세 조회
-    @PostMapping("/store/mission")
+    @GetMapping("/store/{storeId}/mission/{missionId}")
     public ApiResponse<MissionResDTO.GetStoreMission> getStoreMission(
-            @Valid @RequestBody MissionReqDTO.GetStoreMission request
+            @PathVariable Long storeId,
+            @PathVariable Long missionId
     ) {
+        MissionReqDTO.GetStoreMission request =
+                new MissionReqDTO.GetStoreMission(storeId, missionId);
 
         return ApiResponse.onSuccess(
                 MissionSuccessCode.GET_STORE_MISSION_SUCCESS,
@@ -43,8 +50,12 @@ public class MissionController {
     // 사용자가 진행 중인 미션 목록 조회(cursor)
     @PostMapping("/my")
     public ApiResponse<MissionResDTO.GetMyMissions> getMyMissions(
-            @Valid @RequestBody MissionReqDTO.GetMyMissions request
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam Integer size
     ) {
+        MissionReqDTO.GetMyMissions request =
+                new MissionReqDTO.GetMyMissions(userId, cursorId, size);
 
         return ApiResponse.onSuccess(
                 MissionSuccessCode.GET_MY_MISSIONS_SUCCESS,
@@ -53,10 +64,13 @@ public class MissionController {
     }
 
     // 사용자가 진행 중인 미션 1개 상세 조회
-    @PostMapping("/my/mission")
+    @GetMapping("/my/mission")
     public ApiResponse<MissionResDTO.GetMyMission> getMyMission(
-            @Valid @RequestBody MissionReqDTO.GetMyMission request
+            @RequestParam Long userId,
+            @RequestParam Long missionChoiceId
     ) {
+        MissionReqDTO.GetMyMission request =
+                new MissionReqDTO.GetMyMission(userId, missionChoiceId);
 
         return ApiResponse.onSuccess(
                 MissionSuccessCode.GET_MY_MISSION_SUCCESS,

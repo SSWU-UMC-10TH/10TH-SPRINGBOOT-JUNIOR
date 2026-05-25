@@ -28,10 +28,15 @@ public class ReviewController {
     }
 
     // 식당 리뷰 목록 조회(cursor)
-    @PostMapping("/store")
+    @GetMapping("/store")
     public ApiResponse<ReviewResDTO.GetStoreReviews> getStoreReviews(
-            @Valid @RequestBody ReviewReqDTO.GetStoreReviews request
+            @RequestParam Long storeId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam Integer size
     ) {
+        ReviewReqDTO.GetStoreReviews request =
+                new ReviewReqDTO.GetStoreReviews(storeId, cursorId, size);
+
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.GET_STORE_REVIEW_SUCCESS,
                 reviewService.getStoreReviews(request)
@@ -39,10 +44,15 @@ public class ReviewController {
     }
 
     // 내가 쓴 리뷰 조회 - 최신순(cursor)
-    @PostMapping("/my/id")
+    @GetMapping("/my/id")
     public ApiResponse<ReviewResDTO.GetMyReviewsById> getMyReviewsById(
-            @Valid @RequestBody ReviewReqDTO.GetMyReviewsById request
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam Integer size
     ) {
+        ReviewReqDTO.GetMyReviewsById request =
+                new ReviewReqDTO.GetMyReviewsById(userId, cursorId, size);
+
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.GET_MY_REVIEWS_BY_ID_SUCCESS,
                 reviewService.getMyReviewsById(request)
@@ -50,10 +60,16 @@ public class ReviewController {
     }
 
     // 내가 쓴 리뷰 조회 - 평점순(cursor)
-    @PostMapping("/my/rating")
+    @GetMapping("/my/rating")
     public ApiResponse<ReviewResDTO.GetMyReviewsByRating> getMyReviewsByRating(
-            @Valid @RequestBody ReviewReqDTO.GetMyReviewsByRating request
+            @RequestParam Long userId,
+            @RequestParam(required = false) Double cursorRating,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam Integer size
     ) {
+        ReviewReqDTO.GetMyReviewsByRating request =
+                new ReviewReqDTO.GetMyReviewsByRating(userId, cursorRating, cursorId, size);
+
         return ApiResponse.onSuccess(
                 ReviewSuccessCode.GET_MY_REVIEWS_BY_RATING_SUCCESS,
                 reviewService.getMyReviewsByRating(request)

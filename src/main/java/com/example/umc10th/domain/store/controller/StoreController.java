@@ -17,10 +17,12 @@ public class StoreController {
     private final StoreService storeService;
 
     // 식당 정보 조회
-    @PostMapping("/info")
+    @GetMapping("/{storeId}")
     public ApiResponse<StoreResDTO.GetStoreInfo> getStoreInfo(
-            @Valid @RequestBody StoreReqDTO.GetStoreInfo request
+            @PathVariable Long storeId
     ) {
+        StoreReqDTO.GetStoreInfo request = new StoreReqDTO.GetStoreInfo(storeId);
+
         return ApiResponse.onSuccess(
                 StoreSuccessCode.GET_STORE_SUCCESS,
                 storeService.getStoreInfo(request)
