@@ -20,3 +20,10 @@ spring:
 
   config:
     import: optional:file:.env
+
+
+jwt:
+  token:
+    secretKey: "umc10thSecretKeyJwtTokenSpringSecurity2026Project"
+    expiration:
+      access: 1800000

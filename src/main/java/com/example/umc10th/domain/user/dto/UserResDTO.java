@@ -22,4 +22,10 @@ public class UserResDTO {
             LocalDateTime createdAt
     ) {
     }
+
+    // 로그인
+    public record Login(
+            String accessToken
+    ) {
+    }
 }
