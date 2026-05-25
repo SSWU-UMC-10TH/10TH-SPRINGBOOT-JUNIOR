@@ -2,23 +2,30 @@ package com.example.umc10th.global.config;
 
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.GeneralErrorCode;
+import com.example.umc10th.global.security.filter.JwtAuthFilter;
+import com.example.umc10th.global.security.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.Saml2Dsl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tools.jackson.databind.ObjectMapper;
 
+@RequiredArgsConstructor
 // Spring Security 설정 활성화 (우리가 적은 규칙을 우선 적용시킴)
 @EnableWebSecurity
-
-
 @Configuration
 public class SecurityConfig {
     // 필터 체인과 보안 정책을 설정하는 역할
+
+    private final JwtUtil jwtUtil;
 
     private final String[] allowUris = {
             // Swagger
@@ -26,7 +33,8 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/auth/**",
-            "/api/v1/users/signup"
+            "/api/v1/users/signup",
+            "/api/v1/users/login",
     };
 
     @Bean
@@ -75,17 +83,33 @@ public class SecurityConfig {
                 )
 
                 // 로그인 성공 시 해당 화면으로 리다이렉트 (로그인 페이지는 모두가 접근 가능)
-                .formLogin(form -> form
-                        .defaultSuccessUrl("/swagger-ui/index.html", true)
-                        .permitAll()
-                )
+//                .formLogin(form -> form
+//                        .defaultSuccessUrl("/swagger-ui/index.html", true)
+//                        .permitAll()
+//                )
+
+                // jwt 위해서 disable
+                .formLogin(AbstractHttpConfigurer::disable)
 
                 // 로그아웃 시 어느 화면으로 리다이렉트 할 건지 처리
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
-                        .permitAll()
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login?logout")
+//                        .permitAll()
+//                );
+
+                .logout(AbstractHttpConfigurer::disable)
+
+                // session을 쓰지 말라고 방지하는 코드 (Stateless)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
+                // 요청마다 JWT 토큰으로 인증할 것임을 명시
+                .addFilterBefore(
+                        new JwtAuthFilter(jwtUtil),
+                        UsernamePasswordAuthenticationFilter.class
                 );
+
+
         return http.build();
     }
 

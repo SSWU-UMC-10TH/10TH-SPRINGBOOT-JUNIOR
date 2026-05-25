@@ -11,6 +11,7 @@ import com.example.umc10th.domain.user.exceptions.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.FoodCategoryRepository;
 import com.example.umc10th.domain.user.repository.UserFoodPreferenceRepository;
 import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final FoodCategoryRepository foodCategoryRepository;
-    private final UserFoodPreferenceRepository userFoodPreferenceRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public UserResDTO.SignUp signUp(UserReqDTO.SignUp dto) {
 
@@ -73,8 +74,23 @@ public class UserService {
 
     }
 
-    public UserResDTO.MyPage getMyPage(Long userId) {
-        User user = userRepository.findById(userId)
+    public UserResDTO.Login login(UserReqDTO.Login dto) {
+        User user = userRepository.findByEmail(dto.email())
+            .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        if(!passwordEncoder.matches(dto.password(), user.getPassword())) {
+            throw new UserException(UserErrorCode.INVAlID_PASSWORD);
+        }
+
+        String accessToken = jwtUtil.createAccessToken(user);
+
+        return UserResDTO.Login.builder()
+                .accessToken(accessToken)
+                .build();
+    }
+
+    public UserResDTO.MyPage getMyPage(String email) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         return UserConverter.toMyPage(user);
