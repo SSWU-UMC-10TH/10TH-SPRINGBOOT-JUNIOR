@@ -51,7 +51,7 @@ public class User extends BaseEntity {
     private String addressLine2;
 
     // 누적 포인트
-    @Column(name = "point")
+    @Column(name = "point", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long point;
 
     @Column(name = "social_uid")
@@ -78,7 +78,6 @@ public class User extends BaseEntity {
                 .gender(dto.gender())
                 .addressLine1(dto.addressLine1())
                 .addressLine2(dto.addressLine2())
-                .point(0L) // 기본값 설정 책임을 엔티티 내부로
                 .build();
     }
 }
