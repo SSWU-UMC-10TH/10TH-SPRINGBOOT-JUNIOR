@@ -48,16 +48,24 @@ public class UserService {
         User user = User.toUser(dto, encodedPassword);
         User savedUser = userRepository.save(user);
 
-        List<UserFoodPreference> preferences = dto.preferenceFoodIds().stream()
-                .map(foodCategoryId -> {
-                    FoodCategory foodCategory = foodCategoryRepository.findById(foodCategoryId.longValue())
-                            .orElseThrow(() -> new UserException(UserErrorCode.FOOD_CATEGORY_NOT_FOUND));
+        // findByIds 5번 말고 find'All'ById 사용해서 쿼리 1번!
+        List<Long> foodCategoryIds = dto.preferenceFoodIds().stream()
+                .map(Integer::longValue)
+                        .toList();
 
-                    return UserFoodPreference.builder()
-                            .user(savedUser)
-                            .foodCategory(foodCategory)
-                            .build();
-                })
+        List<FoodCategory> foodCategories = foodCategoryRepository.findAllById(foodCategoryIds);
+
+        // 요청 Id 개수와 DB에서 가져온 Id 개수 검증
+        if (foodCategories.size() != foodCategoryIds.size()) {
+            throw new UserException(UserErrorCode.FOOD_CATEGORY_NOT_FOUND);
+        }
+
+        // User 리스트에 넣지 말고 중간 테이블에 저장
+        List<UserFoodPreference> preferences = foodCategories.stream()
+                .map(foodCategory -> UserFoodPreference.builder()
+                        .user(savedUser)
+                        .foodCategory(foodCategory)
+                        .build())
                 .toList();
 
         // 생성된 선호 음식 매핑 데이터를 DB에 명시적으로 저장
