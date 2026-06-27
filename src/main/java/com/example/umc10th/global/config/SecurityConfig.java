@@ -4,6 +4,7 @@ import com.example.umc10th.global.security.filter.JwtAuthFilter;
 import com.example.umc10th.global.security.handler.CustomAccessDeniedHandler;
 import com.example.umc10th.global.security.handler.CustomAuthenticationEntryPoint;
 import com.example.umc10th.global.security.util.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +24,6 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
-    // ⭕ 8주차 가이드 표준: 스프링 컨테이너가 관리하는 두 핸들러 빈을 주입받습니다.
-    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
-
     private final String[] allowUris = {
             "/swagger-ui/**",
             "/swagger-resources/**",
@@ -38,6 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -50,8 +48,8 @@ public class SecurityConfig {
 
                 // 주입받은 객체를 그대로 바인딩
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 401 핸들러 연동
-                        .accessDeniedHandler(customAccessDeniedHandler)           // 403 핸들러 연동
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(objectMapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
                 )
 
                 // JWT 아키텍처 구성을 위한 불필요 기능 비활성화 및 세션정책 처리
