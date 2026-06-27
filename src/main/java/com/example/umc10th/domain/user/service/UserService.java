@@ -7,6 +7,7 @@ import com.example.umc10th.domain.user.entity.FoodCategory;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.entity.mapping.UserFoodPreference;
 import com.example.umc10th.domain.user.exceptions.UserException;
+import com.example.umc10th.domain.user.exceptions.code.FoodCategoryErrorCode;
 import com.example.umc10th.domain.user.exceptions.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.FoodCategoryRepository;
 import com.example.umc10th.domain.user.repository.UserFoodPreferenceRepository;
@@ -57,7 +58,7 @@ public class UserService {
 
         // 요청 Id 개수와 DB에서 가져온 Id 개수 검증
         if (foodCategories.size() != foodCategoryIds.size()) {
-            throw new UserException(UserErrorCode.FOOD_CATEGORY_NOT_FOUND);
+            throw new UserException(FoodCategoryErrorCode.FOOD_CATEGORY_NOT_FOUND);
         }
 
         // User 리스트에 넣지 말고 중간 테이블에 저장
