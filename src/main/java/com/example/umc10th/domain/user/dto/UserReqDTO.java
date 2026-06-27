@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.user.dto;
 
+import com.example.umc10th.domain.user.enums.Gender;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,6 +34,9 @@ public class UserReqDTO {
             @NotNull(message = "생년월일은 필수 입력값입니다.")
             @DateTimeFormat(pattern = "yyyy-MM-dd")
             LocalDate birth,
+
+            @NotNull(message = "성별 선택은 필수입니다.")
+            Gender gender,
 
             @NotBlank(message = "기본 주소는 필수 입력값입니다.")
             String addressLine1,

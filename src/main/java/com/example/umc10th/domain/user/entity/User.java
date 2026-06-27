@@ -26,6 +26,9 @@ public class User extends BaseEntity {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     // 사용자 실제 이름
     @Column(name = "name", nullable = false)
     private String name;
@@ -47,7 +50,7 @@ public class User extends BaseEntity {
     private String addressLine2;
 
     // 누적 포인트
-    @Column(name = "point", nullable = false)
+    @Column(name = "point")
     private Long point;
 
     @Column(name = "social_uid")
@@ -56,10 +59,10 @@ public class User extends BaseEntity {
     @Column(name = "social_type")
     private SocialType socialType;
 
-    // 사용자 닉네임
+    // 사용자 닉네임 (회원가입할 때 입력 필수!)
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
 }
