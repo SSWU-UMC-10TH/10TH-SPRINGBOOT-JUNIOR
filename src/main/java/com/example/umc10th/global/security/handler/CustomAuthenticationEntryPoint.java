@@ -22,6 +22,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
+
         GeneralErrorCode code = GeneralErrorCode.UNAUTHORIZED;
 
         response.setStatus(code.getStatus().value());
@@ -29,7 +30,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         response.getWriter().write(
                 objectMapper.writeValueAsString(
-                        ApiResponse.onFailure(code.getCode(), code.getMessage(), null)
+                        ApiResponse.onFailure(code, null)
                 )
         );
     }

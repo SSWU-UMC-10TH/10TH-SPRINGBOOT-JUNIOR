@@ -23,7 +23,7 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
-    // 파트장님 피드백 반영: 독립 컴포넌트로 주입받은 401, 403 핸들러들
+    // ⭕ 8주차 가이드 표준: 스프링 컨테이너가 관리하는 두 핸들러 빈을 주입받습니다.
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
@@ -48,10 +48,10 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
-                // 단일 책임 원칙에 따라 격리된 예외 헨들러 바인딩
+                // 주입받은 객체를 그대로 바인딩
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 401 에러 위임
-                        .accessDeniedHandler(customAccessDeniedHandler)           // 403 에러 위임
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) // 401 핸들러 연동
+                        .accessDeniedHandler(customAccessDeniedHandler)           // 403 핸들러 연동
                 )
 
                 // JWT 아키텍처 구성을 위한 불필요 기능 비활성화 및 세션정책 처리
