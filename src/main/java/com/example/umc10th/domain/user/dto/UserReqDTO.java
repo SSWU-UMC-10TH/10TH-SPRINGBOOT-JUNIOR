@@ -47,4 +47,13 @@ public class UserReqDTO {
             @NotEmpty(message = "선호 음식 카테고리는 최소 1개 이상 선택해야 합니다.")
             List<Integer> preferenceFoodIds
         ) {}
+
+    public record Login(
+            @NotBlank(message = "이메일은 필수 입력 값입니다.")
+            @Email(message = "올바른 이메일 형식이 아닙니다.")
+            String email,
+
+            @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
+            String password
+    ) {}
     }

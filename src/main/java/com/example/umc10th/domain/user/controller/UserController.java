@@ -8,6 +8,7 @@ import com.example.umc10th.global.apiPayload.ApiResponse;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,16 +23,34 @@ public class UserController {
     public ApiResponse<UserResDTO.SignUp> signUp(
             @Valid @RequestBody UserReqDTO.SignUp dto
     ) {
-        BaseSuccessCode code = UserSuccessCode.OK;
+        BaseSuccessCode code = UserSuccessCode.OK_SIGNUP;
         return ApiResponse.onSuccess(code, userService.signUp(dto));
     }
 
-    // 마이페이지 조회
-    @GetMapping("/{userId}/mypage")
-    public ApiResponse<UserResDTO.MyPage> getMyPage(
-            @PathVariable Long userId
+    // 로그인
+    @PostMapping("/login")
+    public ApiResponse<UserResDTO.Login> login(
+            @Valid @RequestBody UserReqDTO.Login dto
     ) {
-        BaseSuccessCode code = UserSuccessCode.OK;
-        return ApiResponse.onSuccess(code, userService.getMyPage(userId));
+        BaseSuccessCode code = UserSuccessCode.OK_LOGIN;
+        return ApiResponse.onSuccess(code, userService.login(dto));
+    }
+
+    // 마이페이지 조회
+//    @GetMapping("/{userId}/mypage")
+//    public ApiResponse<UserResDTO.MyPage> getMyPage(
+//            @PathVariable Long userId
+//    ) {
+//        BaseSuccessCode code = UserSuccessCode.OK;
+//        return ApiResponse.onSuccess(code, userService.getMyPage(userId));
+//    }
+
+    @GetMapping("/mypage")
+    public ApiResponse<UserResDTO.MyPage> getMyPage(
+            Authentication authentication
+    ) {
+        String email = authentication.getName();
+        BaseSuccessCode code = UserSuccessCode.OK_MYPAGE;
+        return ApiResponse.onSuccess(code, userService.getMyPage(email));
     }
 }

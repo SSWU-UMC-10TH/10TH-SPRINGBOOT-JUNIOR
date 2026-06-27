@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.user.entity;
 
+import com.example.umc10th.domain.user.dto.UserReqDTO;
 import com.example.umc10th.domain.user.enums.Gender;
 import com.example.umc10th.domain.user.enums.SocialType;
 import com.example.umc10th.global.entity.BaseEntity;
@@ -23,7 +24,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -50,7 +51,7 @@ public class User extends BaseEntity {
     private String addressLine2;
 
     // 누적 포인트
-    @Column(name = "point")
+    @Column(name = "point", nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long point;
 
     @Column(name = "social_uid")
@@ -65,4 +66,18 @@ public class User extends BaseEntity {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    // UserService 말고 엔티티에 역할 및 책임 전가, 엔티티 외부에선 빌더 사용하지 않도록!
+    public static User toUser(UserReqDTO.SignUp dto, String encodedPassword) {
+        return User.builder()
+                .name(dto.name())
+                .nickname(dto.nickname())
+                .email(dto.email())
+                .password(encodedPassword)
+                .birth(dto.birth())
+                .gender(dto.gender())
+                .addressLine1(dto.addressLine1())
+                .addressLine2(dto.addressLine2())
+                .build();
+    }
 }

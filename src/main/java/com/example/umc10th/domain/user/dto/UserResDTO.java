@@ -12,6 +12,11 @@ public class UserResDTO {
             String email
     ) {}
 
+    @Builder
+    public record Login(
+            String accessToken
+    ) {}
+
     // 마이페이지 조회
     @Builder
     public record MyPage(
