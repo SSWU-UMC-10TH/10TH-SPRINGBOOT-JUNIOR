@@ -27,6 +27,12 @@ public enum UserErrorCode implements BaseErrorCode {
             "이미 존재하는 닉네임입니다."
     ),
 
+    USER_PASSWORD_NOT_MATCH(
+            HttpStatus.BAD_REQUEST,
+            "USER400_3",
+            "비밀번호가 일치하지 않습니다."
+    ),
+
     USER_FORBIDDEN(
             HttpStatus.FORBIDDEN,
             "USER403_1",

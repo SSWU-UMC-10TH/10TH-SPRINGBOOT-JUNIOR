@@ -7,6 +7,8 @@ import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.exception.UserException;
 import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
+import com.example.umc10th.global.security.entity.AuthUser;
+import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     // 회원가입
     @Transactional
@@ -46,6 +49,24 @@ public class UserService {
         userRepository.save(user);
 
         return UserConverter.toSignUp(user);
+    }
+
+    // 로그인
+    public UserResDTO.Login login(UserReqDTO.Login request) {
+        User user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new UserException(UserErrorCode.USER_PASSWORD_NOT_MATCH);
+        }
+
+        String accessToken = jwtUtil.createAccessToken(new AuthUser(user));
+
+        return UserConverter.toLogin(accessToken);
+    }
+
+    public UserResDTO.GetMyPage getMyPage(AuthUser authUser) {
+        return UserConverter.toGetMyPage(authUser.getUser());
     }
 
     // 마이페이지 조회

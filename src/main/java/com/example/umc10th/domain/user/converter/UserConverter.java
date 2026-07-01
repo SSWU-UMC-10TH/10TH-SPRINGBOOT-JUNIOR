@@ -23,4 +23,8 @@ public class UserConverter {
                 user.getCreatedAt()
         );
     }
+
+    public static UserResDTO.Login toLogin(String accessToken) {
+        return new UserResDTO.Login(accessToken);
+    }
 }
